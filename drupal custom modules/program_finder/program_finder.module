@@ -1,0 +1,14 @@
+<?php
+
+use Drupal\Core\Render\Element;
+
+function program_finder_theme($existing, $type, $theme, $path) {
+  return [
+    'program_finder_list' => [
+      'variables' => [
+        'title' => NULL,
+        'data' => [],
+      ],
+    ],
+  ];
+}

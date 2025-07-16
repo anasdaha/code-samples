@@ -1,0 +1,9 @@
+name: Program Finder
+type: module
+description: 'Provides Program Finder Which is List of all Academics Programs'
+package: Custom
+core_version_requirement: ^9 || ^10
+dependencies:
+  - drupal:node
+  - config
+configure: program_finder.finder_settings

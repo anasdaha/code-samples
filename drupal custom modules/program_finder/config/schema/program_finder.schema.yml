@@ -1,0 +1,10 @@
+program_finder.settings:
+  type: config_object
+  label: 'Program Finder Settings'
+  mapping:
+    path:
+      type: string
+      label: 'Path'
+    disable_page:
+      type: boolean
+      label: 'Disable Program Finder page'

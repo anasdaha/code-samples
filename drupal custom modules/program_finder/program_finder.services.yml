@@ -1,0 +1,11 @@
+services:
+  program_finder.theme_suggestions:
+    class: Drupal\program_finder\ProgramFinderThemeSuggestions
+    tags:
+      - { name: theme_suggestions }
+
+  program_finder.route_subscriber:      
+    class: Drupal\program_finder\EventSubscriber\ProgramFinderRouteSubscriber
+    arguments: ['@config.factory']
+    tags:
+      - { name: event_subscriber }

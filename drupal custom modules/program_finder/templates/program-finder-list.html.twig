@@ -1,0 +1,72 @@
+  <div class="finder" data-finder-initial="12" data-finder-json="/programs.json">
+    <form data-finder-form>
+      <div class="Finder__hero theme-dark">
+        <div class="Finder__background">
+          <img src="{{ data.base_url }}/hero-bg.jpg" alt="placeholder" width="1920" height="1080">
+        </div>
+        <div class="Finder__hero-container">
+          <div class="Finder__intro flush">
+            <h1 class="h2">{{ 'Degree Finder'|t }}</h1>
+            <p class="text-intro">{{ 'Discover, explore, and succeed in a field you love.'|t }}</p>
+            <label class="Finder__input-label h5">
+              {{ 'Search by Keyword'|t }}
+              <input type="search" id="search-filters" class="Finder__input" data-finder-filter="search" name="search">
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {{ drupal_block('system_breadcrumb_block') }}
+      {{ drupal_entity('block', 'timelyupdate') }}
+      <div id="finder-filters" class="contents">
+        <div class="Finder__filters-wrapper">
+          <p class="h5">{{ 'Refine Your Program Search'|t }}</p>
+          <div class="Finder__filters">
+
+            {{ drupal_view('taxonomy_terms_list', 'block_3') }}
+            {{ drupal_view('taxonomy_terms_list', 'block_2') }}
+            <fieldset class="Finder__checkbox-group Finder--inter">
+              <legend class="invis">{{ 'Interdisciplinary'|t }}</legend>
+              <button class="Finder__filter-toggle" aria-expanded="false">
+                {{ 'Interdisciplinary'|t }}
+              </button>
+              <div class="Finder__filter-content">
+                <div class="inner">
+                  <label class="Finder__checkbox-label">
+                    <input type="checkbox" class="Finder__checkbox" value="{{ 'Interdisciplinary'|t }}" data-finder-filter="inter" name="inter">
+                    {{ 'Interdisciplinary'|t }}
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+            {# {{ drupal_view('taxonomy_terms_list', 'block_1') }} #}
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="Finder__active-filters">
+        <div class="Finder__current" data-finder-current></div>
+        <button class="Finder__reset link-underline" data-finder-reset>{{ 'Reset Filters'|t }}</button>
+      </div>
+    </form>
+    
+    <div class="Finder__programs">
+      <p class="h6" data-finder-count></p>
+      <div class="Finder__program-list"></div>
+      <p class="h6" data-finder-count></p>
+      <div class="bottom-buttons">
+        <div class="Finder__load" data-finder-load>
+          <p>
+            <button class="Button Button--filled" data-finder-more="9">
+              <span>{{ 'Load More Programs'|t }}</span>
+            </button>
+          </p>
+          <p>
+            <button class="link-underline" data-finder-all>{{ 'Load All'|t }}</button>
+          </p>
+        </div>
+      </div>
+    </div>
+    {{ drupal_entity('block', 'prefooter') }}
+  </div>

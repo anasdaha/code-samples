@@ -1,0 +1,6 @@
+program_finder.settings_link:
+  title: 'Program Finder Settings'
+  description: 'Manage the Program Finder path and settings.'
+  parent: system.admin_config_system
+  route_name: program_finder.finder_settings
+  weight: 100

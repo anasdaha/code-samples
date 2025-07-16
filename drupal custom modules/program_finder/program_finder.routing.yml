@@ -1,0 +1,15 @@
+program_finder.generate_json:
+  path: '/programs.json'
+  defaults:
+    _controller: '\Drupal\program_finder\Controller\ApiController::renderJsonPage'
+    _title: 'Programs'
+  requirements:
+    _permission: 'access content'
+
+program_finder.finder_settings:
+  path: '/admin/config/program-finder/settings'
+  defaults:
+    _form: '\Drupal\program_finder\Form\ProgramFinderSettingsForm'
+    _title: 'Program Finder Settings'
+  requirements:
+    _permission: 'administer site configuration'
