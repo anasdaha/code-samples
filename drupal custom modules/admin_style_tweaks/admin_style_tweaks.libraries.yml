@@ -1,0 +1,12 @@
+# Custom module library for general purposes.
+admin_style_tweaks:
+  version: 1.x
+  header: true
+  css:
+    component:
+      assets/css/editor_custom.css: {}
+  js:
+    assets/js/script.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

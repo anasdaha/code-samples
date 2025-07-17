@@ -1,0 +1,5 @@
+name: Admin Style Tweaks
+type: module
+description: 'Provides Style and JS Tweaks for Admin Theme'
+package: Custom
+core_version_requirement: ^9 || ^10

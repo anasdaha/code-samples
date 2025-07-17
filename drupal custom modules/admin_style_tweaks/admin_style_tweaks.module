@@ -1,0 +1,246 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * @file
+ * Primary module hooks for Admin Style Tweaks module.
+ */
+
+/**
+ * Implements hook_preprocess_HOOK() for page_attachments.
+ */
+function admin_style_tweaks_page_attachments_alter(&$page) {
+  $page['#attached']['library'][] = 'admin_style_tweaks/admin_style_tweaks';
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function admin_style_tweaks_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $content_types_with_sidebar = [
+    'node_tertiary_edit_form',
+    'node_tertiary_form',
+    'node_faculty_profile_edit_form',
+    'node_faculty_profile_form',
+    'node_news_edit_form',
+    'node_news_form',
+  ];
+  // Check if we are on the node edit form.
+  if (in_array($form_id, $content_types_with_sidebar, TRUE)) {
+    if (isset($form['field_t_content'])) {
+      foreach ($form['field_t_content']['widget'] as $key => &$paragraph) {
+        if (is_numeric($key) && is_array($paragraph) && isset($paragraph['#paragraph_type'])) {
+          if ($paragraph['#paragraph_type'] === 'two_up_panel') {
+            // Check if 'field_theme' exists inside this paragraph.
+            if (isset($paragraph['subform']['field_theme'])) {
+              // Hide the field_theme field.
+              $paragraph['subform']['field_theme']['#access'] = FALSE;
+            }
+            if (isset($paragraph['subform']['field_enable_three_up_panel'])) {
+              $paragraph['subform']['field_enable_three_up_panel']['#access'] = FALSE;
+            }
+          }
+          if ($paragraph['#paragraph_type'] === 'accordion') {
+            if (isset($paragraph['subform']['field_theme'])) {
+              $paragraph['subform']['field_theme']['#access'] = FALSE;
+            }
+          }
+          if ($paragraph['#paragraph_type'] === 'video_embed') {
+            if (isset($paragraph['subform']['field_dark_theme'])) {
+              $paragraph['subform']['field_dark_theme']['#access'] = FALSE;
+            }
+          }
+        }
+      }
+    }
+    if (isset($form['field_n_content'])) {
+      foreach ($form['field_n_content']['widget'] as $key => &$paragraph) {
+        if (is_numeric($key) && is_array($paragraph) && isset($paragraph['#paragraph_type'])) {
+          if ($paragraph['#paragraph_type'] === 'two_up_panel') {
+            if (isset($paragraph['subform']['field_theme'])) {
+              $paragraph['subform']['field_theme']['#access'] = FALSE;
+            }
+            if (isset($paragraph['subform']['field_enable_three_up_panel'])) {
+              $paragraph['subform']['field_enable_three_up_panel']['#access'] = FALSE;
+            }
+          }
+          if ($paragraph['#paragraph_type'] === 'accordion') {
+            if (isset($paragraph['subform']['field_theme'])) {
+              $paragraph['subform']['field_theme']['#access'] = FALSE;
+            }
+          }
+          if ($paragraph['#paragraph_type'] === 'video_embed') {
+            if (isset($paragraph['subform']['field_dark_theme'])) {
+              $paragraph['subform']['field_dark_theme']['#access'] = FALSE;
+            }
+          }
+        }
+      }
+    }
+    if (isset($form['field_fp_content'])) {
+      foreach ($form['field_fp_content']['widget'] as $key => &$paragraph) {
+        if (is_numeric($key) && is_array($paragraph) && isset($paragraph['#paragraph_type'])) {
+          if ($paragraph['#paragraph_type'] === 'two_up_panel') {
+            if (isset($paragraph['subform']['field_theme'])) {
+              $paragraph['subform']['field_theme']['#access'] = FALSE;
+            }
+            if (isset($paragraph['subform']['field_enable_three_up_panel'])) {
+              $paragraph['subform']['field_enable_three_up_panel']['#access'] = FALSE;
+            }
+          }
+          if ($paragraph['#paragraph_type'] === 'accordion') {
+            if (isset($paragraph['subform']['field_theme'])) {
+              $paragraph['subform']['field_theme']['#access'] = FALSE;
+            }
+          }
+          if ($paragraph['#paragraph_type'] === 'video_embed') {
+            if (isset($paragraph['subform']['field_dark_theme'])) {
+              $paragraph['subform']['field_dark_theme']['#access'] = FALSE;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  if (preg_match('/^node_.*_(edit|form)$/', $form_id)) {
+    if(isset($form['field_content']['widget'])){
+      foreach ($form['field_content']['widget'] as $key => &$item){
+        if (!is_numeric($key)) {
+          continue;
+        }
+        if($form['field_content']['widget'][$key]['#paragraph_type'] === 'news_list'){
+          $item['subform']['#after_build'][] = 'admin_style_tweaks_news_list_after_build';
+        }
+      }
+    }
+    if(isset($form['field_cl_content']['widget'])){
+      foreach ($form['field_cl_content']['widget'] as $key => &$item){
+        if (!is_numeric($key)) {
+          continue;
+        }
+        if($form['field_cl_content']['widget'][$key]['#paragraph_type'] === 'news_list'){
+          $item['subform']['#after_build'][] = 'admin_style_tweaks_news_list_after_build';
+        }
+      }
+    }
+    if(isset($form['field_t_content']['widget'])){
+      foreach ($form['field_t_content']['widget'] as $key => &$item){
+        if (!is_numeric($key)) {
+          continue;
+        }
+        if($form['field_t_content']['widget'][$key]['#paragraph_type'] === 'news_list'){
+          $item['subform']['#after_build'][] = 'admin_style_tweaks_news_list_after_build';
+        }
+      }
+    }
+  }
+  // update None option for Target field for block.
+  if (isset($form['field_target']['widget'])) {
+    $form['field_target']['widget']['#after_build'][] = 'admin_style_tweaks_field_target_after_build';
+  }
+  if (isset($form['field_x_target']['widget'])) {
+    $form['field_x_target']['widget']['#after_build'][] = 'admin_style_tweaks_field_target_after_build';
+  }
+  if (isset($form['field_linkedin_target']['widget'])) {
+    $form['field_linkedin_target']['widget']['#after_build'][] = 'admin_style_tweaks_field_target_after_build';
+  }
+  if (isset($form['field_instagram_target']['widget'])) {
+    $form['field_instagram_target']['widget']['#after_build'][] = 'admin_style_tweaks_field_target_after_build';
+  }
+  if (isset($form['field_youtube_target']['widget'])) {
+    $form['field_youtube_target']['widget']['#after_build'][] = 'admin_style_tweaks_field_target_after_build';
+  }
+  if (isset($form['field_bluesky_target']['widget'])) {
+    $form['field_bluesky_target']['widget']['#after_build'][] = 'admin_style_tweaks_field_target_after_build';
+  }
+  if (isset($form['field_threads_target']['widget'])) {
+    $form['field_threads_target']['widget']['#after_build'][] = 'admin_style_tweaks_field_target_after_build';
+  }
+  if (isset($form['field_more_target']['widget'])) {
+    $form['field_more_target']['widget']['#after_build'][] = 'admin_style_tweaks_field_target_after_build';
+  }
+
+}
+
+function admin_style_tweaks_news_list_after_build(array $element, FormStateInterface $form_state) {
+  if (isset($element['field_news_taxonomy']['widget']['#options']['_none'])) {
+    $element['field_news_taxonomy']['widget']['#options']['_none'] = t('All News');
+  }
+  return $element;
+}
+
+
+/**
+ * Custom after_build for field_target to set default and remove '_none'.
+ */
+function admin_style_tweaks_field_target_after_build(array $element, \Drupal\Core\Form\FormStateInterface $form_state) {
+  // Remove '_none' option if it exists.
+  if (isset($element['#options']['_none'])) {
+    unset($element['#options']['_none']);
+  }
+
+  // Force default to _self if it's not already set or set to _none.
+  $default = $element['#default_value'] ?? '';
+  if (empty($default) || $default === '_none' || (is_array($default) && in_array('_none', $default))) {
+    $element['#default_value'] = '_self';
+  }
+
+  return $element;
+}
+
+
+function admin_style_tweaks_remove_none_option($element, \Drupal\Core\Form\FormStateInterface $form_state) {
+  // Remove any empty key (usually used for - None -).
+  if (isset($element['#options']) && isset($element['#options'][''])) {
+    unset($element['#options']['']);
+  }
+
+  // Just in case, remove `#empty_option` if still set.
+  unset($element['#empty_option']);
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_widget_single_element_form_alter().
+ */
+function admin_style_tweaks_field_widget_single_element_form_alter(&$element, \Drupal\Core\Form\FormStateInterface $form_state, $context) {
+  // Check if the widget has a 'target' attribute.
+  if (isset($element['options']['attributes']['target'])) {
+    $target_element = &$element['options']['attributes']['target'];
+
+    // Remove the '- None -' option.
+    //  unset($target_element['#empty_option']);
+     $target_element['#after_build'][] = 'admin_style_tweaks_remove_none_option';
+
+    // Set default to '_self' if not already set.
+    if (empty($target_element['#default_value'])) {
+      $target_element['#default_value'] = '_self';
+    }
+
+    // Clean up labels by removing text in parentheses.
+    foreach ($target_element['#options'] as $key => $label) {
+      $clean_label = preg_replace('/\s*\(.*?\)/', '', $label);
+      $target_element['#options'][$key] = trim($clean_label);
+    }
+  }
+  // Target the correct field only
+  if (
+    $context['items']->getFieldDefinition()->getName() === 'field_pre_text_size'
+    OR
+    $context['items']->getFieldDefinition()->getName() === 'field_text_size'
+    OR
+    $context['items']->getFieldDefinition()->getName() === 'field_post_text_size'
+  ) {
+    // Remove 'na' from the options
+    if (isset($element['#options']['_none'])) {
+      unset($element['#options']['_none']);
+    }
+    // Optionally: set 'small_text' as default value if nothing is selected
+    if (empty($element['#default_value'])) {
+      $element['#default_value'] = ['small_text'];
+    }
+  }
+}
