@@ -1,0 +1,8 @@
+name: 'Main Navigation Seed'
+type: module
+description: 'Seeds custom data of "Main navigation" and related blocks.'
+core_version_requirement: ^10 || ^11
+package: Custom
+dependencies:
+  - block
+  - menu_ui

@@ -1,0 +1,306 @@
+<?php
+
+use Drupal\system\Entity\Menu;
+use Drupal\block_content\Entity\BlockContent;
+use Drupal\media\Entity\Media;
+use Drupal\block_content\Entity\BlockContentType;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\file\Entity\File;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Block\BlockBase;
+
+/**
+ * Implements hook_install().
+ */
+function main_navigation_seed_install() {
+  // === CREATE MENUS ===
+  $menus = [
+    'main' => [
+      'label' => 'Main navigation',
+      'description' => 'Site section links',
+      'items' => ['About', 'Academics', 'Admission', 'Campus Life', 'Research & Creativity'],
+    ],
+    'sub-about' => [
+      'label' => 'Sub Navigation - About',
+      'description' => '',
+      'items' => ['About Carnegie Mellon', 'Esse, laudantium voluptatum!'],
+    ],
+    'sub-academics' => [
+      'label' => 'Sub Navigation - Academics',
+      'description' => '',
+      'items' => ['Academics Overview', 'Esse, laudantium voluptatum!'],
+    ],
+    'sub-admission' => [
+      'label' => 'Sub Navigation - Admission',
+      'description' => '',
+      'items' => ['Admission Overview', 'Esse, laudantium voluptatum!'],
+    ],
+    'sub-campus-life' => [
+      'label' => 'Sub Navigation - Campus Life',
+      'description' => '',
+      'items' => ['Campus Life Overview', 'Esse, laudantium voluptatum!'],
+    ],
+    'sub-research-creativity' => [
+      'label' => 'Sub Navigation - Research & Creativity',
+      'description' => '',
+      'items' => ['Research & Creativity Overview', 'Esse, laudantium voluptatum!'],
+    ],
+  ];
+
+  foreach ($menus as $machine_name => $menu_info) {
+    if (!Menu::load($machine_name)) {
+      Menu::create([
+        'id' => $machine_name,
+        'label' => $menu_info['label'],
+        'description' => $menu_info['description'],
+      ])->save();
+    }
+
+    foreach ($menu_info['items'] as $weight => $title) {
+      // Check if a menu item with the same title already exists in this menu.
+      $existing_links = \Drupal::entityTypeManager()
+        ->getStorage('menu_link_content')
+        ->loadByProperties([
+          'title' => $title,
+          'menu_name' => $machine_name,
+        ]);
+
+      if (empty($existing_links)) {
+        \Drupal::entityTypeManager()
+          ->getStorage('menu_link_content')
+          ->create([
+            'title' => $title,
+            'link' => ['uri' => 'internal:#'],
+            'menu_name' => $machine_name,
+            'weight' => $weight,
+          ])
+          ->save();
+      }
+    }
+  }
+
+  // === CREATE BLOCK OF TYPE: Featured Menu Block ===
+
+  // 1. Ensure block type exists.
+  $type_id = 'featured_menu_block';
+  if (!BlockContentType::load($type_id)) {
+    BlockContentType::create([
+      'id' => $type_id,
+      'label' => 'Featured Menu Block',
+    ])->save();
+
+    // Optional: Add fields manually or via config install.
+  }
+
+  // 2. Upload or get image from remote/local path.
+  $image_url = 'https://images.pexels.com/photos/270408/pexels-photo-270408.jpeg';
+  $image_data = file_get_contents($image_url);
+  $filename = 'public://pexels-photo-01.jpg';
+  $uri = \Drupal::service('file_system')->saveData($image_data, $filename, FileSystemInterface::EXISTS_REPLACE);
+
+  // Create a file entity.
+  $file = File::create(['uri' => $uri]);
+  $file->save();
+
+  // Create the media entity.
+  $media = Media::create([
+    'bundle' => 'image',
+    'name' => 'Strategic Framework Image',
+    'status' => 1,
+    'field_media_image' => [
+      'target_id' => $file->id(),
+      'alt' => 'Strategic Framework',
+      'title' => 'Strategic Framework',
+    ],
+  ]);
+  $media->save();
+
+  $blocks_to_create = [
+    'Featured About' => [
+      'field_title' => 'Turing Awards',
+      'field_number' => '13',
+      'field_cta' => [
+        'uri' => 'internal:#',
+        'title' => 'Featured About',
+      ],
+      'body' => '<p>Lorem ipsum dolor sit ameting consectetur adipiscing more or elit. Lorem ipsum dolor sit mor amet, consectetur adpiscing ip.</p>',
+    ],
+    'Featured Academics' => [
+      'field_title' => 'Turing Awards',
+      'field_number' => '13',
+      'field_cta' => [
+        'uri' => 'internal:#',
+        'title' => 'Featured Academics',
+      ],
+      'body' => '<p>Lorem ipsum dolor sit ameting consectetur adipiscing more or elit. Lorem ipsum dolor sit mor amet, consectetur adpiscing ip.</p>',
+    ],
+    'Featured Admission' => [
+      'field_title' => 'Turing Awards',
+      'field_number' => '13',
+      'field_cta' => [
+        'uri' => 'internal:#',
+        'title' => 'Featured Admission',
+      ],
+      'body' => '<p>Lorem ipsum dolor sit ameting consectetur adipiscing more or elit. Lorem ipsum dolor sit mor amet, consectetur adpiscing ip.</p>',
+    ],
+    'Featured Campus Life' => [
+      'field_title' => 'Turing Awards',
+      'field_number' => '13',
+      'field_cta' => [
+        'uri' => 'internal:#',
+        'title' => 'Featured Campus Life',
+      ],
+      'body' => '<p>Lorem ipsum dolor sit ameting consectetur adipiscing more or elit. Lorem ipsum dolor sit mor amet, consectetur adpiscing ip.</p>',
+    ],
+    'Featured Research & Creativity' => [
+      'field_title' => 'Turing Awards',
+      'field_number' => '13',
+      'field_cta' => [
+        'uri' => 'internal:#',
+        'title' => 'Featured Research & Creativity',
+      ],
+      'body' => '<p>Lorem ipsum dolor sit ameting consectetur adipiscing more or elit. Lorem ipsum dolor sit mor amet, consectetur adpiscing ip.</p>',
+    ],
+  ];
+
+  foreach ($blocks_to_create as $info => $data) {
+    // Check if block with this info already exists
+    $existing_blocks = \Drupal::entityTypeManager()
+      ->getStorage('block_content')
+      ->loadByProperties(['info' => $info]);
+
+    if (empty($existing_blocks)) {
+      // Create block
+      $block = BlockContent::create([
+        'type' => $type_id,
+        'info' => $info,
+        'field_title' => $data['field_title'],
+        'field_number' => $data['field_number'],
+        'field_cta' => $data['field_cta'],
+        'body' => [
+          'value' => $data['body'],
+          'format' => 'basic_html',
+        ],
+        'field_media' => [
+          'target_id' => $media->id(),
+        ],
+      ]);
+      $block->save();
+    } else {
+      // Reuse the existing block
+      $block = reset($existing_blocks);
+    }
+  }
+
+  // Theme machine name.
+  $theme = 'bloomix_base';
+  // === PLACE MAIN MENU BLOCK ===
+  if (!Block::load('main_menu')) {
+    Block::create([
+      'id' => 'main_menu',
+      'theme' => $theme,
+      'plugin' => 'system_menu_block:main', // Main menu block plugin
+      'region' => 'header', 
+      'settings' => [
+        'id' => 'system_menu_block:main',
+        'label' => 'Main navigation',
+        'label_display' => FALSE,
+        'level' => 1,
+        'depth' => 1,
+        'expand_all_items' => TRUE,
+        'menu_name' => 'main',
+      ],
+      'visibility' => [],
+      'weight' => 0,
+      'status' => 1,
+    ])->save();
+  }
+
+  $blocks_to_place = [
+  'Featured About' => [
+    'machine_id' => 'featured_about_block',
+    'region' => 'news_sidebar',
+    'label' => 'Featured About',
+    'label_display' => FALSE,
+  ],
+  'Featured Academics' => [
+    'machine_id' => 'featured_academics_block',
+    'region' => 'news_sidebar',
+    'label' => 'Featured Academics',
+    'label_display' => FALSE,
+  ],
+  'Featured Admission' => [
+    'machine_id' => 'featured_admission_block',
+    'region' => 'news_sidebar',
+    'label' => 'Featured Admission',
+    'label_display' => FALSE,
+  ],
+  'Featured Campus Life' => [
+    'machine_id' => 'featured_campus_life_block',
+    'region' => 'news_sidebar',
+    'label' => 'Featured Campus Life',
+    'label_display' => FALSE,
+  ],
+  'Featured Research & Creativity' => [
+    'machine_id' => 'featured_research_creativity_block',
+    'region' => 'news_sidebar',
+    'label' => 'Featured Research & Creativity',
+    'label_display' => FALSE,
+  ],
+];
+
+  foreach ($blocks_to_place as $info => $config) {
+    $block_content = \Drupal::entityTypeManager()
+      ->getStorage('block_content')
+      ->loadByProperties(['info' => $info]);
+    $block_content = reset($block_content);
+
+    if (!$block_content) {
+      continue; // Skip if the custom block content doesn't exist.
+    }
+
+    $plugin_id = 'block_content:' . $block_content->uuid();
+    $machine_id = $config['machine_id'];
+    $existing_block = Block::load($machine_id);
+
+    $needs_replacement = FALSE;
+
+    if ($existing_block) {
+      // Check if block plugin is valid and points to the same content block.
+      $existing_plugin_id = $existing_block->getPluginId();
+
+      // Case 1: plugin ID doesn't match the UUID of current block content.
+      if ($existing_plugin_id !== $plugin_id) {
+        $needs_replacement = TRUE;
+      }
+
+      // Case 2: plugin instance fails (broken/missing block)
+      try {
+        \Drupal::service('plugin.manager.block')->createInstance($existing_plugin_id);
+      } catch (\Exception $e) {
+        $needs_replacement = TRUE;
+      }
+
+      if ($needs_replacement) {
+        $existing_block->delete();
+      }
+    }
+
+    // Create new placement if block was missing or removed.
+    if ($needs_replacement || !$existing_block) {
+      Block::create([
+        'id' => $machine_id,
+        'theme' => $theme,
+        'plugin' => $plugin_id,
+        'region' => $config['region'],
+        'settings' => [
+          'label' => $config['label'],
+          'label_display' => $config['label_display'],
+        ],
+        'visibility' => [],
+        'weight' => 0,
+        'status' => 1,
+      ])->save();
+    }
+  }
+}
