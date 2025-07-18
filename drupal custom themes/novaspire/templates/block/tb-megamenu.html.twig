@@ -1,0 +1,18 @@
+{% if css_style is defined %}
+<style type="text/css">
+  .tb-megamenu.animate .mega > .mega-dropdown-menu, .tb-megamenu.animate.slide .mega > .mega-dropdown-menu > div {
+  {{ css_style }}
+  }
+</style>
+{% endif %}
+
+<button class="header__menu-toggle" data-expand="popup" data-expand-toggle="menu-active" aria-expanded="false"> <span class="screen-reader-text">Toggle menu</span> <span class="humb"></span> </button>
+<nav class="header__menu">
+  <ul class="header__nav">
+    {{ content }}
+  </ul>
+  <div class="header__group">
+    {{ drupal_menu('audience') }}
+    {{ drupal_menu('actions') }}
+  </div>
+</nav>

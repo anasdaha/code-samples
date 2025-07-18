@@ -1,0 +1,14 @@
+global-styling:
+  version: VERSION
+  css:
+    theme:
+      dist/assets/style.css: {}
+      css/custom.css: {}
+
+  js:
+    dist/assets/script.js: {}
+    js/custom.js: {}
+
+  dependencies:
+    - core/jquery
+    - core/drupal      

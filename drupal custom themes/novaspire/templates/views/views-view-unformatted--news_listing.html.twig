@@ -1,0 +1,60 @@
+{#
+/**
+ * @file
+ * Theme override to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ */
+#}
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+<div class="card-list">
+{% for row in rows %}
+  <div class="NewsCard">
+    {% if row.content['#row']._entity.field_media_image is not empty %}
+      {% set media_entity = row.content['#row']._entity.field_media_image.entity %}
+      {% if media_entity.field_media_image is not empty %}
+        {% set image_file = media_entity.field_media_image.entity %}
+        {% set image_url = file_url(image_file.uri.value)%}
+        <div class="NewsCard__image frame" data-ratio="3:2">
+          <img src="{{ image_url }}" alt="{{ media_entity.field_media_image.alt }}">
+        </div>
+      {% endif %}
+    {% endif %}
+    <div class="NewsCard__details flush">
+      {% if row.content['#row']._entity.created[0].value|render %}
+        <div class="meta">
+          <div class="meta-date">
+            {{ row.content['#row']._entity.created[0].value|date('F d, Y') }}
+            {% set term_reference = row.content['#row']._entity.field_event_type %}
+            {% if term_reference is not empty %}
+            &nbsp; · &nbsp;
+            {% for term in term_reference %}
+              {% set term_entity = term.entity %}
+              {% set term_url = path('entity.taxonomy_term.canonical', {'taxonomy_term': term_entity.id}) %}
+                <a href="{{ term_url }}">{{ term_entity.name.value }}</a>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+      {% if row.content['#row']._entity.title[0].value|render %}
+        <h3 class="NewsGrid__title h4"><a href="{{path('entity.node.canonical', {'node': row.content['#row'].nid }) }}">{{ row.content['#row']._entity.title[0].value }}</a></h3>
+      {% endif %}
+      {% if row.content['#row']._entity.field_short_description[0].value|render %}
+        <p>{{ row.content['#row']._entity.field_short_description[0].value }}</p>
+      {% endif %}  
+    </div>
+  </div>
+{% endfor %}
+</div>

@@ -1,0 +1,29 @@
+{
+  "name": "build-astro",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "devDependencies": {
+    "@csstools/postcss-global-data": "^2.1.1",
+    "@types/flickity": "^2.2.11",
+    "astro": "^4.0.3",
+    "postcss-preset-env": "^9.3.0"
+  },
+  "dependencies": {
+    "automodal": "^0.2.2",
+    "countup.js": "^2.8.0",
+    "data-utilities": "^0.0.0",
+    "dom-focus-lock": "^1.1.0",
+    "flickity": "^3.0.0",
+    "flickity-sync": "^3.0.0",
+    "gsap": "^3.12.5",
+    "sal.js": "^0.8.5",
+    "sanitize.css": "^13.0.0"
+  }
+}

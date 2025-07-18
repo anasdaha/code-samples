@@ -1,0 +1,195 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a paragraph.
+ *
+ * Available variables:
+ * - paragraph: Full paragraph entity.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - paragraph.getCreatedTime() will return the paragraph creation timestamp.
+ *   - paragraph.id(): The paragraph ID.
+ *   - paragraph.bundle(): The type of the paragraph, for example, "image" or "text".
+ *   - paragraph.getOwnerId(): The user ID of the paragraph author.
+ *   See Drupal\paragraphs\Entity\Paragraph for a full list of public properties
+ *   and methods for the paragraph object.
+ * - content: All paragraph items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - paragraphs: The current template type (also known as a "theming hook").
+ *   - paragraphs--type-[type]: The current paragraphs type. For example, if the paragraph is an
+ *     "Image" it would result in "paragraphs--type--image". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - paragraphs--view-mode--[view_mode]: The View Mode of the paragraph; for example, a
+ *     preview would result in: "paragraphs--view-mode--preview", and
+ *     default: "paragraphs--view-mode--default".
+ * - view_mode: View mode; for example, "preview" or "full".
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_paragraph()
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+    'finder'
+  ]
+%}
+
+{% block paragraph %}
+  <div {{ attributes.addClass(classes) }} data-finder-initial="9" id="collapse-item-{{paragraph.id()}}">
+    {% block content %}
+      <form data-finder-form>
+        <div class="container space-sm">
+          <div class="cta-header" data-animate data-animation="fade-in-up">
+            <div class="flush" style="width: 100%;">
+              {% if content.field_title|render %}
+                {% if content.field_title_tag|render %}
+                  {% set tag = content.field_title_tag|render|striptags|trim %}
+                {% else %}
+                  {% set tag = 'h1' %}
+                {% endif %}
+                <{{tag}} class="title-heading-top" data-animate data-animation="fade-in-up" style="margin-bottom:0">{{ content.field_title|render|striptags|trim|raw }}</{{tag}}>
+              {% endif %}
+            </div>
+            {% if content.field_description|render %}
+              <div class="cta-content">{{ content.field_description|render }}</div>
+            {% endif %}
+          </div>
+          <div class="alphabet-navigation-original">
+            <div class="alphabet-navigation">
+              <fieldset class="Finder__alphabet-label"><legend class="invis">A</legend><input type="radio" class="Finder__alphabet-radio" value="A" data-finder-filter="letter" name="letter" aria-label="Filter by A"> A </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">B</legend> <input type="radio" class="Finder__alphabet-radio" value="B" data-finder-filter="letter" name="letter" aria-label="Filter by B"> B </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">C</legend> <input type="radio" class="Finder__alphabet-radio" value="C" data-finder-filter="letter" name="letter" aria-label="Filter by C"> C </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">D</legend> <input type="radio" class="Finder__alphabet-radio" value="D" data-finder-filter="letter" name="letter" aria-label="Filter by D"> D </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">E</legend> <input type="radio" class="Finder__alphabet-radio" value="E" data-finder-filter="letter" name="letter" aria-label="Filter by E"> E </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">F</legend> <input type="radio" class="Finder__alphabet-radio" value="F" data-finder-filter="letter" name="letter" aria-label="Filter by F"> F </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">G</legend> <input type="radio" class="Finder__alphabet-radio" value="G" data-finder-filter="letter" name="letter" aria-label="Filter by G"> G </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">H</legend> <input type="radio" class="Finder__alphabet-radio" value="H" data-finder-filter="letter" name="letter" aria-label="Filter by H"> H </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">I</legend> <input type="radio" class="Finder__alphabet-radio" value="I" data-finder-filter="letter" name="letter" aria-label="Filter by I"> I </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">J</legend> <input type="radio" class="Finder__alphabet-radio" value="J" data-finder-filter="letter" name="letter" aria-label="Filter by J"> J </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">K</legend> <input type="radio" class="Finder__alphabet-radio" value="K" data-finder-filter="letter" name="letter" aria-label="Filter by K"> K </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">L</legend> <input type="radio" class="Finder__alphabet-radio" value="L" data-finder-filter="letter" name="letter" aria-label="Filter by L"> L </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">M</legend> <input type="radio" class="Finder__alphabet-radio" value="M" data-finder-filter="letter" name="letter" aria-label="Filter by M"> M </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">N</legend> <input type="radio" class="Finder__alphabet-radio" value="N" data-finder-filter="letter" name="letter" aria-label="Filter by N"> N </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">O</legend> <input type="radio" class="Finder__alphabet-radio" value="O" data-finder-filter="letter" name="letter" aria-label="Filter by O"> O </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">P</legend> <input type="radio" class="Finder__alphabet-radio" value="P" data-finder-filter="letter" name="letter" aria-label="Filter by P"> P </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">Q</legend> <input type="radio" class="Finder__alphabet-radio" value="Q" data-finder-filter="letter" name="letter" aria-label="Filter by Q"> Q </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">R</legend> <input type="radio" class="Finder__alphabet-radio" value="R" data-finder-filter="letter" name="letter" aria-label="Filter by R"> R </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">S</legend> <input type="radio" class="Finder__alphabet-radio" value="S" data-finder-filter="letter" name="letter" aria-label="Filter by S"> S </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">T</legend> <input type="radio" class="Finder__alphabet-radio" value="T" data-finder-filter="letter" name="letter" aria-label="Filter by T"> T </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">U</legend> <input type="radio" class="Finder__alphabet-radio" value="U" data-finder-filter="letter" name="letter" aria-label="Filter by U"> U </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">V</legend> <input type="radio" class="Finder__alphabet-radio" value="V" data-finder-filter="letter" name="letter" aria-label="Filter by V"> V </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">W</legend> <input type="radio" class="Finder__alphabet-radio" value="W" data-finder-filter="letter" name="letter" aria-label="Filter by W"> W </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">X</legend> <input type="radio" class="Finder__alphabet-radio" value="X" data-finder-filter="letter" name="letter" aria-label="Filter by X"> X </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">Y</legend> <input type="radio" class="Finder__alphabet-radio" value="Y" data-finder-filter="letter" name="letter" aria-label="Filter by Y"> Y </fieldset><fieldset class="Finder__alphabet-label"> <legend class="invis">Z</legend> <input type="radio" class="Finder__alphabet-radio" value="Z" data-finder-filter="letter" name="letter" aria-label="Filter by Z"> Z </fieldset>
+              <span class="flickity-status"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="main-finder">
+          <div id="main" class="main">
+            <div class="content-with-sidebar">
+              <div class="main__sidebar">
+                <div class="Finder__filters">
+                  <fieldset class="Finder__checkbox-group Finder__filters-search">
+                    <legend class="invis">{{ 'Search by keyword'|t }}</legend>
+                    <input type="search" id="search-filters" class="Finder__input h5" placeholder="Search program keyword" data-finder-filter="search" name="search" aria-label="Search by Program Keyword">
+                  </fieldset>
+                  <div class="alphabet-navigation-placeholder"></div>
+
+                  <fieldset class="Finder__checkbox-group Finder--level">
+                    <legend class="invis">{{ 'Degree Level'|t }}</legend> 
+                      <button class="Finder__filter-toggle h4" data-expand="popup" aria-expanded="false">
+                        {{ 'Degree Level'|t }}
+                        <span class="finder__icon">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 13"><path d="M1.59 13 0 11.41l4.77-4.77L0 1.868 1.59.279l6.36 6.36L1.59 13Z"></path></svg>
+                        </span>
+                      </button>
+                      <div class="Finder__filter-content">
+                        <div class="inner">
+                           {{ drupal_view('terms_program_type', 'block_1') }}
+                        </div>
+                      </div>
+                  </fieldset>
+
+                  <fieldset class="Finder__checkbox-group Finder--type">
+                    <legend class="invis">{{ 'Program Type'|t }}</legend>
+                    <button class="Finder__filter-toggle h4" data-expand="popup" aria-expanded="false">
+                      {{ 'Program Type'|t }}
+                      <span class="finder__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 13"><path d="M1.59 13 0 11.41l4.77-4.77L0 1.868 1.59.279l6.36 6.36L1.59 13Z"></path></svg>
+                      </span>
+                    </button> 
+                    <div class="Finder__filter-content">
+                      <div class="inner">
+                        {{ drupal_view('terms_program_level', 'block_1') }}
+                      </div>
+                    </div>
+                  </fieldset>
+
+                  <fieldset class="Finder__checkbox-group Finder--method">
+                    <legend class="invis">{{ 'Instructional Format'|t }}</legend>
+                    <button class="Finder__filter-toggle h4" data-expand="popup" aria-expanded="false">
+                      {{ 'Instructional Format'|t }}
+                      <span class="finder__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 13"><path d="M1.59 13 0 11.41l4.77-4.77L0 1.868 1.59.279l6.36 6.36L1.59 13Z"></path></svg>
+                      </span>
+                    </button>
+                    <div class="Finder__filter-content">
+                      <div class="inner">
+                        {{ drupal_view('terms_program_method', 'block_1') }}
+                      </div>
+                    </div>
+                  </fieldset>
+
+                  <fieldset class="Finder__checkbox-group Finder--area">
+                    <legend class="invis">{{ 'Area of Study'|t }}</legend>
+                    <button class="Finder__filter-toggle h4" data-expand="popup" aria-expanded="false">
+                      {{ 'Area of Study'|t }}
+                      <span class="finder__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 13"><path d="M1.59 13 0 11.41l4.77-4.77L0 1.868 1.59.279l6.36 6.36L1.59 13Z"></path></svg>
+                      </span>
+                    </button>
+                    <div class="Finder__filter-content">
+                      <div class="inner">
+                        {{ drupal_view('area_of_study', 'block_1') }}
+                      </div>
+                    </div>
+                  </fieldset>
+
+                  <fieldset class="Finder__checkbox-group Finder--college">
+                    <legend class="invis">{{ 'College'|t }}</legend>
+                    <button class="Finder__filter-toggle h4" data-expand="popup" aria-expanded="false">
+                      {{ 'College'|t }}
+                      <span class="finder__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 13"><path d="M1.59 13 0 11.41l4.77-4.77L0 1.868 1.59.279l6.36 6.36L1.59 13Z"></path></svg>
+                      </span>
+                    </button>
+                    <div class="Finder__filter-content">
+                      <div class="inner">
+                        {{ drupal_view('terms_program_college', 'block_1') }}
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+
+                <div class="Finder__active-filters">
+                  <div class="Finder__current" data-finder-current></div>
+                  <button class="Finder__reset link-underline h4" data-finder-reset>{{ 'Reset Selected Filters'|t }}</button>
+                  <span class="overlay"></span>
+                </div>
+              </div>
+
+              <div class="main__content">
+                <div class="flush">
+                  <p class="Finder__count" data-finder-count></p>
+                  <div class="Finder__programs">
+                    <div class="Finder__program-list"></div>
+                    <p class="Finder__count" data-finder-count></p>
+                    <div class="bottom-buttons">
+                      <div class="Finder__load" data-finder-load>
+                        <button class="Button Button--a11y" data-finder-more="9"><span>{{ 'Load More Programs'|t }}</span></button>
+                        <button class="Feature__button link-underline h5" data-finder-all>{{ 'Load All Programs'|t }}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    {% endblock %}
+  </div>
+  {{ drupal_view('programs_finder', 'block_1') }}
+{% endblock paragraph %}

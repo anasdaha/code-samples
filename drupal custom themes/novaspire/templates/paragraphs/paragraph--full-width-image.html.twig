@@ -1,0 +1,88 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a paragraph.
+ *
+ * Available variables:
+ * - paragraph: Full paragraph entity.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - paragraph.getCreatedTime() will return the paragraph creation timestamp.
+ *   - paragraph.id(): The paragraph ID.
+ *   - paragraph.bundle(): The type of the paragraph, for example, "image" or "text".
+ *   - paragraph.getOwnerId(): The user ID of the paragraph author.
+ *   See Drupal\paragraphs\Entity\Paragraph for a full list of public properties
+ *   and methods for the paragraph object.
+ * - content: All paragraph items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - paragraphs: The current template type (also known as a "theming hook").
+ *   - paragraphs--type-[type]: The current paragraphs type. For example, if the paragraph is an
+ *     "Image" it would result in "paragraphs--type--image". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - paragraphs--view-mode--[view_mode]: The View Mode of the paragraph; for example, a
+ *     preview would result in: "paragraphs--view-mode--preview", and
+ *     default: "paragraphs--view-mode--default".
+ * - view_mode: View mode; for example, "preview" or "full".
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_paragraph()
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+    'container',
+    'space'
+  ]
+%}
+
+{% block paragraph %}
+  <div{{ attributes.addClass(classes) }} id="collapse-item-{{paragraph.id()}}">
+    {% block content %}
+      {% if content.field_title|render %}
+        {% if content.field_title_tag|render %}
+          {% set tag = content.field_title_tag|render|striptags|trim %}
+        {% else %}
+          {% set tag = 'h2' %}
+        {% endif %}
+        <{{tag}} class="title-heading">{{ content.field_title|render|striptags|trim|raw }}</{{tag}}>
+      {% endif %}
+      <figure class="Media">
+        {% if content.field_media_image|render %}
+          <div class="Media__image">
+            {{ content.field_media_image|render }}
+            {% if content.field_video_url|render %}
+              <a href="{{ content.field_video_url[0]['#url'] }}" data-automodal class="Media__play" aria-label="Play Video">
+                <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" x="0" y="0" version="1.1" viewBox="0 0 62 62">
+                  <g shape-rendering="crispEdges">
+                    <path fill-opacity=".8" d="M0 0h62v62H0z"></path>
+                    <path fill="none" stroke="#ffce01" stroke-width="3" d="M1.5 1.5h59v59h-59z"></path>
+                  </g>
+                  <path fill="#ffce01" d="M45 31 24.8 43.1V18.9L45 31z"></path>
+                </svg>
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+        {% if content.field_caption|render %}
+          <figcaption class="image__caption flush">
+            {{ content.field_caption|render }}
+          </figcaption>
+        {% endif %}
+      </figure>
+    {% endblock %}
+  </div>
+{% endblock paragraph %}

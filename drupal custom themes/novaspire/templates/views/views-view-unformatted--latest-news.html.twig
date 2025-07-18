@@ -1,0 +1,93 @@
+{#
+/**
+ * @file
+ * Theme override to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ */
+#}
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+<div class="NewsGrid__wrapper">
+{% for row in rows %}
+  {% if loop.index == 1 %}
+    <div class="NewsGrid__item NewsGrid__item--featured flush" data-animate data-animation="fade-in-up">
+      {% if row.content['#row']._entity.field_media_image is not empty %}
+        {% set media_entity = row.content['#row']._entity.field_media_image.entity %}
+        {% if media_entity.field_media_image is not empty %}
+          {% set image_file = media_entity.field_media_image.entity %}
+          {% set image_url = file_url(image_file.uri.value)%}
+          <div class="NewsGrid__image">
+            <img src="{{ image_url }}" width="750" height="400" alt="{{ media_entity.field_media_image.alt }}">
+          </div>
+        {% endif %}
+      {% endif %}
+      <div class="NewsGrid__text">
+        <div class="NewsGrid__content">
+          {% if row.content['#row']._entity.title[0].value|render %}
+            <h3 class="NewsGrid__title h4"><a href="{{path('entity.node.canonical', {'node': row.content['#row'].nid }) }}">{{ row.content['#row']._entity.title[0].value }}</a></h3>
+          {% endif %}
+          {% if row.content['#row']._entity.field_short_description[0].value|render %}
+            <p>{{ row.content['#row']._entity.field_short_description[0].value }}</p>
+          {% endif %}
+          {% if row.content['#row']._entity.created[0].value|render %}
+            <div class="meta">
+              <div class="meta-date">{{ row.content['#row']._entity.created[0].value|date('F d, o') }}</div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% elseif loop.index in [2,3,4] %}
+    <div class="NewsGrid__item NewsGrid__item--alt flush" data-animate 
+        {% if loop.index == 2 %}
+          data-animation="fade-in-right"
+        {% elseif loop.index == 3 %}
+          data-animation="fade-in-down"
+        {% elseif loop.index == 4 %}
+          data-animation="fade-in-left"
+        {% endif %}
+      >
+        {% if row.content['#row']._entity.field_media_image is not empty %}
+          {% set media_entity = row.content['#row']._entity.field_media_image.entity %}
+          {% if media_entity.field_media_image is not empty %}
+            {% set image_file = media_entity.field_media_image.entity %}
+            {% set image_url = file_url(image_file.uri.value)%}
+            <div class="NewsGrid__image">
+              <img src="{{ image_url }}" width="600" height="400" alt="{{ media_entity.field_media_image.alt }}">
+            </div>
+          {% endif %}
+        {% endif %}
+      <div class="NewsGrid__text">
+        <div class="NewsGrid__content">
+          {% if row.content['#row']._entity.title[0].value|render %}
+            <h3 class="NewsGrid__title h4"><a href="{{path('entity.node.canonical', {'node': row.content['#row'].nid }) }}">{{ row.content['#row']._entity.title[0].value }}</a></h3>
+          {% endif %}
+          {% if row.content['#row']._entity.field_short_description[0].value|render %}
+            <p>{{ row.content['#row']._entity.field_short_description[0].value }}</p>
+          {% endif %}
+          {% if row.content['#row']._entity.created[0].value|render %}
+            <div class="meta">
+              <div class="meta-date">{{ row.content['#row']._entity.created[0].value|date('M d, Y') }}</div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div {{ row.attributes.addClass(row_classes) }}>
+      {{- row.content -}}
+    </div>
+  {% endif %}
+{% endfor %}
+</div>

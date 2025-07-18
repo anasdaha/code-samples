@@ -1,0 +1,115 @@
+{#
+/**
+ * @file
+ * Theme override to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ */
+#}
+
+<script src="https://cdn.jsdelivr.net/npm/add-to-calendar-button@2" async defer></script>
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+<div class="Events__grid-wrapper">
+  <div class="Events__grid">
+    {% for row in rows %}
+      <div class="node--type-event node--promoted node--view-mode-teaser Events__card Events__card--alt"
+        data-animate="true" data-animation="fade-in-up">
+        <div class="Events__card-details flush">
+          <div>
+            <div class="eyebrow h5">
+              {% set term_reference = row.content['#row']._entity.field_event_type %}
+              {% if term_reference is not empty %}
+                {% for term in term_reference %}
+                  {% set term_entity = term.entity %}
+                  {% set term_url = path('entity.taxonomy_term.canonical', {'taxonomy_term': term_entity.id}) %}
+                    {{ term_entity.name.value }}
+                {% endfor %}
+              {% endif %}
+            </div>
+            {% if row.content['#row']._entity.title[0].value|render %}
+              <h3 class="Events__card-heading">
+                <a href="{{path('entity.node.canonical', {'node': row.content['#row'].nid }) }}">{{ row.content['#row']._entity.title[0].value }}</a>
+              </h3>
+            {% endif %}
+          </div>
+          <div class="Events__info">
+            {% if row.content['#row']._entity.custom_start_date_raw|render %}
+              <div class="Events__date">
+                {{ row.content['#row']._entity.custom_start_date_raw|date('F d, Y') }}
+                {% if row.content['#row']._entity.custom_end_date_raw|date('F d, Y')|render %}
+                  {% if row.content['#row']._entity.custom_start_date_raw|date('F d, Y') != row.content['#row']._entity.custom_end_date_raw|date('F d, Y') %}
+                    {{ '-'|t }}
+                    {{ row.content['#row']._entity.custom_end_date_raw|date('F d, Y') }}
+                  {% endif %}
+                {% endif %}
+              </div>
+            {% endif %}
+            {% if row.content['#row']._entity.custom_start_date_raw|date('g:i A')|render %}
+              <div class="Events__time">
+                {% if row.content['#row']._entity.custom_start_date_raw|date('g:i A') == '12:00 AM' and row.content['#row']._entity.custom_end_date_raw|date('g:i A') == '11:59 PM' %}
+                  {{ "All day"|t}}
+                {% else %}
+                  {{ row.content['#row']._entity.custom_start_date_raw|date('g:i A') }}
+                  {{ '-'|t }}
+                  {{ row.content['#row']._entity.custom_end_date_raw|date('g:i A') }}
+                {% endif %}
+              </div>
+            {% endif %}
+            {% if row.content['#row']._entity.field_location[0].value|render %}
+              <div class="Events__location">
+                {{ row.content['#row']._entity.field_location[0].value|render|replace({'&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'"})|raw }}
+              </div>
+            {% endif %}
+
+            {% set raw_url = row.content['#row']._entity.field_cta[0].value.uri %}
+            {% if  'internal:' in raw_url %}
+              {% set url = raw_url|split(':')[1] %}
+            {% elseif 'entity:' in raw_url %}
+              {% set url = path('entity.node.canonical', {'node': raw_url|split(':')[1]|split('/')[1]}) %}
+            {% else %}
+              {% set url = raw_url %}
+            {% endif %}
+            
+            {% if url %}
+              <div class="Events__ticket">
+                <a href="{{ url }}">{{ row.content['#row']._entity.field_cta[0].value.title }}</a>
+              </div>
+            {% endif %}
+            
+            <div class="Events__plus">
+              <add-to-calendar-button
+                id="css-part-example-{{ row.content['#row'].nid }}"
+                name="{{ row.content['#row']._entity.title[0].value }}"
+                options="'Apple','Google','iCal','Outlook.com','Yahoo'"
+                location="World Wide Web"
+                timeZone="America/New_York"
+                startDate="{{ row.content['#row']._entity.custom_start_date_raw|date("Y-m-d") }}"
+                endDate="{{ row.content['#row']._entity.custom_end_date_raw|date("Y-m-d") }}"
+                startTime="{{ row.content['#row']._entity.custom_start_date_raw|date('H:i') }}"
+                endTime="{{ row.content['#row']._entity.custom_end_date_raw|date('H:i') }}"
+                hideIconButton="true"
+                hideCheckmark="true"
+                hideBackground="true"
+                size="4"
+                trigger="click"
+                buttonStyle="text"
+                listStyle="overlay"
+              ></add-to-calendar-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>

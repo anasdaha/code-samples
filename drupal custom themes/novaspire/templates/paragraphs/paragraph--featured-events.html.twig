@@ -1,0 +1,204 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a paragraph.
+ *
+ * Available variables:
+ * - paragraph: Full paragraph entity.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - paragraph.getCreatedTime() will return the paragraph creation timestamp.
+ *   - paragraph.id(): The paragraph ID.
+ *   - paragraph.bundle(): The type of the paragraph, for example, "image" or "text".
+ *   - paragraph.getOwnerId(): The user ID of the paragraph author.
+ *   See Drupal\paragraphs\Entity\Paragraph for a full list of public properties
+ *   and methods for the paragraph object.
+ * - content: All paragraph items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - paragraphs: The current template type (also known as a "theming hook").
+ *   - paragraphs--type-[type]: The current paragraphs type. For example, if the paragraph is an
+ *     "Image" it would result in "paragraphs--type--image". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - paragraphs--view-mode--[view_mode]: The View Mode of the paragraph; for example, a
+ *     preview would result in: "paragraphs--view-mode--preview", and
+ *     default: "paragraphs--view-mode--default".
+ * - view_mode: View mode; for example, "preview" or "full".
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_paragraph()
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+    'Events',
+    'Events--home',
+    'bg-tan'
+  ]
+%}
+<script src="https://cdn.jsdelivr.net/npm/add-to-calendar-button@2" async defer></script>
+{% block paragraph %}
+  <div{{ attributes.addClass(classes) }} id="collapse-item-{{paragraph.id()}}">
+    {% block content %}
+      <div class="cta-header flush" data-animate data-animation="fade-in-up">
+        {% if content.field_title|render %}
+          {% if content.field_title_tag|render %}
+            {% set tag = content.field_title_tag|render|striptags|trim %}
+          {% else %}
+            {% set tag = 'h2' %}
+          {% endif %}
+          <{{tag}} class="cta-heading" data-animate data-animation="fade-in-up">{{ content.field_title|render|striptags|trim|raw }}</{{tag}}>
+        {% endif %}
+        {% if content.field_cta|render %}
+          <div class="desktop"><a href="{{ content.field_cta[0]['#url'] }}" class="Button"><span>{{ content.field_cta[0]['#title'] }}</span></a></div>
+        {% endif %}
+      </div>
+        {% set news_taxonomy_id = '' %}
+        {% set news_college_id = '' %}
+        {% set news_majors_id = '' %}
+        {% set news_program_id = '' %}
+        {% set news_faculty_id = '' %}
+
+        {% for item in content.field_events_type %}
+          {% if item['#plain_text']|length > 0 %}
+            {% if news_taxonomy_id == '' %}
+              {% set news_taxonomy_id = item['#plain_text'] %}
+            {% else %}
+              {% set news_taxonomy_id = item['#plain_text'] ~ ', ' ~ news_taxonomy_id %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+        {% if news_taxonomy_id == '' %}
+          {% set news_taxonomy_id = 'all' %}
+        {% endif %}
+
+        {% for item in content.field_college %}
+          {% if item['#plain_text']|length > 0 %}
+            {% if news_college_id == '' %}
+              {% set news_college_id = item['#plain_text'] %}
+            {% else %}
+              {% set news_college_id = item['#plain_text'] ~ ', ' ~ news_college_id %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+        {% if news_college_id == '' %}
+          {% set news_college_id = 'all' %}
+        {% endif %}
+
+        {% for item in content.field_majors %}
+          {% if item['#plain_text']|length > 0 %}
+            {% if news_majors_id == '' %}
+              {% set news_majors_id = item['#plain_text'] %}
+            {% else %}
+              {% set news_majors_id = item['#plain_text'] ~ ', ' ~ news_majors_id %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+        {% if news_majors_id == '' %}
+          {% set news_majors_id = 'all' %}
+        {% endif %}
+
+        {% for item in content.field_program %}
+          {% if item['#plain_text'] is defined and item['#plain_text']|trim is not empty %}
+            {% if news_program_id == '' %}
+              {% set news_program_id = item['#plain_text'] %}
+            {% else %}
+              {% set news_program_id = item['#plain_text'] ~ ', ' ~ news_program_id %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+        {% if news_program_id == '' %}
+          {% set news_program_id = 'all' %}
+        {% endif %}
+
+        {% for item in content.field_faculty %}
+          {% if item['#plain_text'] is defined and item['#plain_text']|trim is not empty %}
+            {% if news_faculty_id == '' %}
+              {% set news_faculty_id = item['#plain_text'] %}
+            {% else %}
+              {% set news_faculty_id = item['#plain_text'] ~ ', ' ~ news_faculty_id %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+        {% if news_faculty_id == '' %}
+          {% set news_faculty_id = 'all' %}
+        {% endif %}
+
+        {{ drupal_view('featured_events', 'block_1', news_taxonomy_id, news_college_id, news_majors_id, news_program_id, news_faculty_id) }}
+      {% if content.field_drawline_animation|render|striptags|trim == 'True' %}
+        <div data-animate data-animation="fade-in-left" class="Event__grid">
+          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1098.65 196">
+            <defs>
+              <style>
+                .cls-1 {
+                  fill: none;
+                  stroke: #3dcfff;
+                  stroke-width: 10px;
+                }
+              </style>
+            </defs>
+            <rect class="cls-1" x="6" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="187.39" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="368.78" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="550" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="731.39" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="912.78" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="1094" y="6" width="181.22" height="184"></rect>
+          </svg>
+          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1098.65 196">
+            <defs>
+              <style>
+                .cls-1 {
+                  fill: none;
+                  stroke: #3dcfff;
+                  stroke-width: 10px;
+                }
+              </style>
+            </defs>
+            <rect class="cls-1" x="6" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="187.39" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="368.78" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="550" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="731.39" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="912.78" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="1094" y="6" width="181.22" height="184"></rect>
+          </svg>
+          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1098.65 196">
+            <defs>
+              <style>
+                .cls-1 {
+                  fill: none;
+                  stroke: #3dcfff;
+                  stroke-width: 10px;
+                }
+              </style>
+            </defs>
+            <rect class="cls-1" x="6" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="187.39" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="368.78" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="550" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="731.39" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="912.78" y="6" width="181.22" height="184"></rect>
+            <rect class="cls-1" x="1094" y="6" width="181.22" height="184"></rect>
+          </svg>
+        </div>
+        <svg id="event-svg" class="Event__drawline" xmlns="http://www.w3.org/2000/svg">
+          <path class="Event__line" fill="#3dcfff" stroke-width="3" stroke="#3dcfff" d="M0 0 l1920 0"></path>
+        </svg>
+      {% endif %}
+    {% endblock %}
+  </div>
+{% endblock paragraph %}

@@ -1,0 +1,559 @@
+{#
+/**
+ * @file
+ * Theme override to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ */
+#}
+
+<script>
+  const programsData = {
+    "programs": [
+      {% for row in rows %}
+        {% set term_reference_department = row.content['#row']._entity.field_areas_study %}
+        {% set term_name_department = [] %}
+        {% if term_reference_department is not empty %}
+          {% for term in term_reference_department %}
+            {% set term_name_department = term_name_department|merge(['"' ~ term.entity.name.value ~ '"']) %}
+          {% endfor %}
+        {% endif %}
+
+        {% set term_reference_college = row.content['#row']._entity.field_program_college %}
+        {% set term_name_college = [] %}
+        {% if term_reference_college is not empty %}
+          {% for term in term_reference_college %}
+            {% set term_name_college = term_name_college|merge(['"' ~ term.entity.name.value ~ '"']) %}
+          {% endfor %}
+        {% endif %}
+
+        {% set term_reference_major = row.content['#row']._entity.field_program_major %}
+        {% set term_name_major = [] %}
+        {% if term_reference_major is not empty %}
+          {% for term in term_reference_major %}
+            {% set term_name_major = term_name_major|merge(['"' ~ term.entity.name.value ~ '"']) %}
+          {% endfor %}
+        {% endif %}
+        {% set term_reference_method = row.content['#row']._entity.field_instructional_format %}
+        {% set term_name_method = '' %}
+        {% if term_reference_method is not empty %}
+          {% for term in term_reference_method %}
+            {% set term_url = path('entity.taxonomy_term.canonical', {'taxonomy_term': term.entity.id}) %}
+              {% set term_name_method = term.entity.name.value %}
+          {% endfor %}
+        {% endif %}
+        {% set term_reference_level = row.content['#row']._entity.field_program_level %}
+        {% set term_name_level = '' %}
+        {% if term_reference_level is not empty %}
+          {% for term in term_reference_level %}
+            {% set term_url = path('entity.taxonomy_term.canonical', {'taxonomy_term': term.entity.id}) %}
+              {% set term_name_level = term.entity.name.value %}
+          {% endfor %}
+        {% endif %}
+        {% set term_reference_type = row.content['#row']._entity.field_program_type %}
+        {% set term_name_type = [] %}
+        {% if term_reference_type is not empty %}
+          {% for term in term_reference_type %}
+            {% set term_name_type = term_name_type|merge(['"' ~ term.entity.name.value ~ '"']) %}
+          {% endfor %}
+        {% endif %}
+
+        {
+          "name":         "{{ row.content['#row']._entity.title[0].value|raw }}",
+          "area":         [{{ term_name_department|join(', ')|raw }}],
+          "type":         [{{ term_name_type|join(', ')|raw }}],
+          "level":        ["{{term_name_level|raw}}"],
+          "method":       ["{{term_name_method|raw}}"],
+          "college":      [{{ term_name_college|join(', ')|raw }}],
+          "description":  ["{{ row.content['#row']._entity.field_short_description[0].value|striptags|trim|raw }}"],
+          "url":          ["{{ path('entity.node.canonical', {'node': row.content['#row'].nid }) }}"],
+          "urlOptional":  ["{{ path('entity.node.canonical', {'node': row.content['#row'].nid }) }}"],
+          "keyword":      ["{{ row.content['#row']._entity.field_search_keyword[0].value|striptags|trim|raw }}"],
+          "major":        [{{ term_name_major|join(', ')|raw }}],
+        },
+      {% endfor %}
+    ]
+  }
+
+const finders = document.querySelectorAll(".finder");
+
+const container = document.querySelector('.Finder__program-list');
+let filteredPrograms = programsData.programs; // Maintain the state of filtered programs
+
+const typeOrder = [
+  "Bachelor's Degree",
+  "Minor", 
+  "Master's Degree",
+  "Online Master's",
+  "Concentration",
+  "Certificate",
+  "Online Certificate"
+];
+
+if (container !== null) {
+
+  filteredPrograms.sort((a, b) => {
+  const typeA = a.type[0];
+  const typeB = b.type[0];
+  // First sort by type
+  const typeCompare = typeOrder.indexOf(typeA) - typeOrder.indexOf(typeB);
+  // If types are equal, sort by name
+  if (typeCompare === 0) {
+    const nameA = Array.isArray(a.name) ? a.name[0] : a.name;
+    const nameB = Array.isArray(b.name) ? b.name[0] : b.name;
+    return nameA.localeCompare(nameB);
+  }
+  return typeCompare;
+});
+
+  function renderPrograms(filteredPrograms) {
+    container.innerHTML = ''; // Clear previous content
+    filteredPrograms.forEach((program, index) => {
+      const programLevels = program.level.join(', ');
+      const programType = program.type.join(', ');
+      const programMethod = program.method.join(', ');
+      const areaLevels = program.area.join(', ');
+      const programCollege = program.college.join(', ');
+
+      const programDiv = document.createElement('div');
+      programDiv.classList.add('Program__card', 'flush');
+      programDiv.setAttribute('data-finder-item', '');
+      programDiv.setAttribute('data-finder-search', program.keyword);
+      programDiv.setAttribute('data-finder-level', program.level);
+      programDiv.setAttribute('data-finder-type', program.type);
+      programDiv.setAttribute('data-finder-method', program.method);
+      programDiv.setAttribute('data-finder-area', program.area);
+      programDiv.setAttribute('data-finder-college', program.college);
+
+
+      const programMain = document.createElement('div');
+      programMain.classList.add('Program__main');
+
+      const programMain1 = document.createElement('div');
+      programMain1.classList.add('top');
+      programMain.appendChild(programMain1);
+
+      const programMainType= document.createElement('div');
+      programMainType.classList.add('flush');
+      programMain.appendChild(programMainType);
+
+      const programMain2 = document.createElement('div');
+      programMain2.classList.add('Program__modality');
+
+      programMain.appendChild(programMain2);
+
+      const programContent = document.createElement('div');
+      programContent.classList.add('Program__content');
+
+      const programToggle = document.createElement('button');
+      programToggle.classList.add('Program__toggle');
+      programToggle.ariaExpanded = "false";
+      programToggle.ariaLabel = "Toggle program content";
+
+      const description = document.createElement('p');
+      description.textContent = program.description;
+
+      const buttonLink = document.createElement('a');
+      buttonLink.setAttribute('href', program.url);
+      buttonLink.classList.add('Button');
+      const buttonLinkSpan = document.createElement('span');
+      buttonLinkSpan.textContent = "Program Details";
+      buttonLink.appendChild(buttonLinkSpan);
+
+      // let buttonLinkOptional;
+      // if (program.urlOptional.length !== 0) {
+      //   buttonLinkOptional = document.createElement('a');
+      //   buttonLinkOptional.setAttribute('href', program.urlOptional);
+      //   buttonLinkOptional.classList.add('Button');
+      //   const buttonLinkSpanOptional = document.createElement('span');
+      //   buttonLinkSpanOptional.textContent = "Optional Department Link";
+      //   buttonLinkOptional.appendChild(buttonLinkSpanOptional);
+      // }
+
+      const h2 = document.createElement('h2');
+      const link = document.createElement('a');
+      link.setAttribute('href', program.url);
+      link.classList.add('link__underline', 'h4');
+      link.textContent = program.name;
+      h2.appendChild(link);
+
+      const method = document.createElement('p');
+      method.classList.add('Program__method');
+      method.innerHTML = programMethod;
+
+    
+
+      programMain1.appendChild(h2);
+      programMain2.appendChild(method);
+
+      container.appendChild(programDiv);
+      
+      programDiv.appendChild(programMain);
+      programDiv.appendChild(programToggle);
+      programDiv.appendChild(programContent);
+
+      programContent.appendChild(description);
+      programContent.appendChild(buttonLink);
+      // if (program.urlOptional.length !== 0) {
+      //   programContent.appendChild(buttonLinkOptional);
+      // }
+
+      if (program.area.length !== 0) {
+        const areas = document.createElement('p');
+        areas.classList.add('Program__areas', 'h5');
+        areas.innerHTML = areaLevels;
+
+        programMain1.appendChild(areas);
+      }
+
+
+
+      if (program.type.length !== 0) {
+        const types = document.createElement('p');
+        types.classList.add('Program__type', 'h5');
+        types.innerHTML = programType;
+        programMainType.appendChild(types);
+      }
+      
+      if (program.college.length !== 0) {
+        const colleges = document.createElement('p');
+        colleges.classList.add('Program__college');
+        colleges.innerHTML = programCollege;
+
+        programMain2.appendChild(colleges);
+      }
+
+    });
+
+    updateProgramCount(filteredPrograms.length, programsData.programs.length);
+    toggle(); // Ensure toggle function is called after rendering
+  }
+  function filterProgramsByLetter(letter) {
+    filteredPrograms = programsData.programs.filter(program => program.name.startsWith(letter));
+    renderPrograms(filteredPrograms);
+    document.querySelector('[data-finder-reset]').style.display = 'block';
+
+    // Manage active class for alphabet navigation
+    document.querySelectorAll('.alphabet-letter').forEach(letterElement => {
+      if (letterElement.textContent === letter) {
+        letterElement.classList.add('active');
+      } else {
+        letterElement.classList.remove('active');
+      }
+    });
+
+    // Add data-finder-done attribute to the finder class
+    document.querySelectorAll('.finder').forEach(finder => {
+      finder.setAttribute('data-finder-done', '');
+    });
+  }
+
+  function filterSearch() {
+    const getParams = () => {
+      const params = new URLSearchParams(window.location.search);
+
+      const levelValue = (finders[0] && finders[0].getAttribute("data-finder-level-single") !== null)
+        ? [finders[0].getAttribute("data-finder-level-single")]
+        : params.getAll("level");
+
+      return {
+        search: params.getAll("search"),
+        level: levelValue,
+        letter: params.getAll("letter"),
+        type: params.getAll("type"),
+        method: params.getAll("method"),
+        area: params.getAll("area"),
+        college: params.getAll("college"),
+
+      };
+    };
+
+    const matches = (filter, data, item) => {
+      const values = item.getAttribute(`data-finder-${filter}`)?.split(",") || [];
+      const selectedValues = data[filter];
+
+      if (filter === "search") {
+        const searchTerms = selectedValues;
+        if (searchTerms.length) {
+          const keywordMatch = values.some((value) =>
+            searchTerms.some((term) => value.toLowerCase().includes(term.toLowerCase()))
+          );
+          if (!keywordMatch && !searchTerms.some((term) => item.textContent?.toLowerCase().includes(term.toLowerCase()))) {
+            return false;
+          }
+        }
+      } else if (filter === "letter") {
+        const searchTerms = selectedValues;
+        if (searchTerms.length) {
+            const keywordMatch = values.some((value) =>
+                searchTerms.some((term) => value.toLowerCase().startsWith(term.toLowerCase()))
+            );
+            if (!keywordMatch && !searchTerms.some((term) => item.textContent?.toLowerCase().startsWith(term.toLowerCase()))) {
+                return false;
+            }
+        }
+      } else {
+        if (selectedValues.length && !values.some((value) => selectedValues.includes(value))) {
+          return false;
+        }
+      }
+
+      return true;
+    };
+
+    for (const finder of finders) {
+      const initial = parseInt(finder.getAttribute("data-finder-initial"), 10);
+      let max = initial;
+
+      // handle form
+      const form = finder.querySelector("[data-finder-form]");
+
+      form?.addEventListener("submit", e => {
+        e.preventDefault();
+      });
+
+      // update buttons
+      const current = form?.querySelector("[data-finder-current]");
+
+      const updateButtons = data => {
+        let html = "";
+        for (const [filter, values] of Object.entries(data)) {
+          for (const value of values) {
+            if (value) {
+              html += `<button class="Finder__remove" data-finder-remove="${filter}">${value}</button>`;
+            }
+          }
+        }
+        if (current) {
+          current.innerHTML = html;
+        }
+      };
+
+      function moduleFinderButtons() {
+        const finderCurrent = document.querySelector('.Finder__current');
+        const finderReset = document.querySelector('.Finder__reset');
+
+        if (finderCurrent && finderReset && finderCurrent.querySelectorAll('button').length === 1) {
+          finderReset.style.display = 'none';
+        } else {
+          finderReset.style.display = '';
+        }
+      }
+
+      // handle buttons
+      current?.addEventListener("click", e => {
+        const { target } = e;
+        if (target instanceof HTMLButtonElement) {
+          const filter = target.getAttribute("data-finder-remove");
+          const value = target.innerHTML;
+          if (["area", "level", "letter", "type", "method", "college"].includes(filter)) {
+            const input = form?.querySelector(
+              `[data-finder-filter="${filter}"][value="${value.replace(",", "&#44;").replace("&amp;", "&")}"]`
+            );
+            input.checked = false;
+          } else {
+            const input = form?.querySelector(`[data-finder-filter="${filter}"]`);
+            input.value = "";
+          }
+          target.remove();
+        }
+        updateQuery();
+      });
+
+      // update items
+      const items = finder.querySelectorAll("[data-finder-item]");
+      const counts = finder.querySelectorAll("[data-finder-count]");
+
+      const update = () => {
+        const data = getParams();
+        for (const item of items) {
+          let showItem = true;
+          for (const filter in data) {
+            if (!matches(filter, data, item)) {
+              showItem = false;
+              break;
+            }
+          }
+          if (showItem) {
+            item.setAttribute("data-finder-item", "show");
+          } else {
+            item.setAttribute("data-finder-item", "hide");
+          }
+        }
+        updateButtons(data);
+        updateLimit();
+        window.dispatchEvent(new Event("resize"));
+      };
+
+      // update query string
+      const updateQuery = () => {
+        const data = new FormData(form);
+        const query = new URLSearchParams(data).toString();
+        window.history.replaceState(null, "", `?${query}`);
+        max = initial;
+        update();
+      };
+
+      const focusNextCard = () => {
+        const limit = finder.querySelector("[data-finder-limit]");
+
+        // Get the next sibling element of the current limit, which will be the next card
+        if (limit) {
+          const nextCard = limit.nextElementSibling;
+
+          // If there's a next card, focus it. Otherwise, do nothing.
+          if (nextCard) {
+            const anchorInNextCard = nextCard.querySelector('h2 a');
+            if (anchorInNextCard) {
+              setTimeout(function () {
+                anchorInNextCard.focus();
+              }, 400);
+            }
+          }
+        }
+      };
+
+      // update limit
+      const updateLimit = () => {
+        const limit = finder.querySelector("[data-finder-limit]");
+        const show = finder.querySelectorAll('[data-finder-item="show"]');
+        let target = show[max - 1];
+        if (!target || target === show[show.length - 1]) {
+          target = show[show.length - 1];
+          finder.setAttribute("data-finder-done", "");
+        } else {
+          finder.removeAttribute("data-finder-done");
+        }
+        limit?.removeAttribute("data-finder-limit");
+        target?.setAttribute("data-finder-limit", "");
+        for (const [i, count] of counts.entries()) {
+          const visible = [...show].indexOf(target) + 1;
+          const total = show.length;
+          if (total === 0) {
+            if (i === 0) {
+              count.innerHTML = "No results";
+            } else {
+              count.innerHTML = "";
+            }
+          } else {
+            count.innerHTML = `Showing ${visible} of ${total} results`;
+          }
+        }
+      };
+
+      // handle filters
+      const filters = form?.querySelectorAll("[data-finder-filter]") || [];
+
+      for (const filter of filters) {
+        filter.addEventListener("input", updateQuery);
+      }
+
+      // handle reset
+      const reset = form?.querySelector("[data-finder-reset]");
+
+      reset?.addEventListener("click", () => {
+        window.location.href = window.location.pathname; // Refresh the entire page and clear URL parameters
+      });
+
+      // handle load more
+      const moreAll = finder.querySelectorAll("[data-finder-more]");
+
+      for (const more of moreAll) {
+        const add = parseInt(more?.getAttribute("data-finder-more"), 10);
+        more?.addEventListener("click", () => {
+          max += add;
+          focusNextCard();
+          update();
+        });
+      }
+
+      // handle load all
+      const all = finder.querySelector("[data-finder-all]");
+
+      all?.addEventListener("click", () => {
+        const show = finder.querySelectorAll('[data-finder-item="show"]');
+        max = show.length;
+        focusNextCard();
+        update();
+      });
+
+      // set state on load
+      window.addEventListener("load", () => {
+        const data = getParams();
+        let actualFilters;
+
+        for (const [filter, values] of Object.entries(data)) {
+          if (values[0]) {
+            if (finders[0].getAttribute("data-finder-level-single") !== null) {
+              actualFilters = ["area", "letter", "college", "type", "method"];
+            } else {
+              actualFilters = ["area", "level", "letter", "college", "type", "method"];
+            }
+
+            if (actualFilters.includes(filter)) {
+              for (const value of values) {
+                const input = form?.querySelector(
+                  `[data-finder-filter="${filter}"][value="${value}"]`
+                );
+                if (input) {  // Add a safety check in case the input isn't found
+                  input.checked = true;
+                }
+              }
+            } else {
+              const input = form?.querySelector(`[data-finder-filter="${filter}"]`);
+              if (input) {  // Add a safety check here too
+                input.value = values[0];
+              }
+            }
+          }
+        }
+        update();
+      });
+      update();
+    }
+  }
+
+  function toggle() {
+    const programTitles = document.querySelectorAll('.Program__toggle');
+
+    programTitles.forEach(function (title) {
+      title.addEventListener('click', function () {
+        const isExpanded = title.getAttribute('aria-expanded') === 'true';
+        title.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+      });
+    });
+  }
+
+  // Function to update program count
+  function updateProgramCount(visibleCount, totalCount) {
+    const countElements = document.querySelectorAll('[data-finder-count]');
+    countElements.forEach(countElement => {
+      countElement.innerHTML = `Showing ${visibleCount} of ${totalCount} results`;
+    });
+  }
+
+  // Initialize the alphabet navigation
+  document.querySelectorAll('.alphabet-letter').forEach(letterElement => {
+    letterElement.addEventListener('click', (e) => {
+      e.preventDefault(); // Prevent default link behavior
+      const letter = letterElement.textContent;
+      filterProgramsByLetter(letter);
+    });
+  });
+
+  // Initial render of all programs
+  renderPrograms(programsData.programs);
+  filterSearch();
+}
+
+
+</script>

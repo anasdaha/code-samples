@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 241 98">
+  <defs>
+    <clipPath id="a">
+      <path fill="none" stroke-width="0" d="M0 0h241v98H0z"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#a)">
+    <path fill="#1d9cd3" fill-rule="evenodd" d="M47 0H0v290h289V0H47Zm48 2H49v46h46V2Zm0 48H49v46h46V50Zm2 46V50h46v46H97Zm-2 2H49v46h46V98Zm2 46V98h46v46H97Zm-2 2H49v46h46v-46Zm2 46v-46h46v46H97Zm-2 2H49v46h46v-46Zm2 46v-46h46v46H97Zm-2 2H49v46h46v-46Zm2 46v-46h46v46H97Zm0-240V2h46v46H97Zm48-46v46h46V2h-46Zm0 48v46h46V50h-46Zm0 48v46h46V98h-46Zm0 48v46h46v-46h-46Zm0 48v46h46v-46h-46Zm0 48v46h46v-46h-46Zm48-146V50h46v46h-46Zm0 48V98h46v46h-46Zm0 48v-46h46v46h-46Zm0 48v-46h46v46h-46Zm0 48v-46h46v46h-46Zm0-240V2h46v46h-46Zm48-46v46h46V2h-46Zm0 48v46h46V50h-46Zm0 48v46h46V98h-46Zm0 48v46h46v-46h-46Zm0 48v46h46v-46h-46Zm0 48v46h46v-46h-46ZM2 48V2h45v46H2Zm0 48V50h45v46H2Zm0 48V98h45v46H2Zm0 48v-46h45v46H2Zm0 48v-46h45v46H2Zm0 48v-46h45v46H2Z" data-name="Frame 112"/>
+  </g>
+</svg>

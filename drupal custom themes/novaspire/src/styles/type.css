@@ -1,0 +1,139 @@
+:root {
+  --heading: var(--blue);
+  --link: var(--blue);
+  --text: var(--black-secondary);
+  background-color: #3E3E3E;
+}
+
+@font-face {
+  font-family: "awesome";
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/AwesomeSerif-Tall.woff2") format('woff2'),
+      url("../fonts/AwesomeSerif-Tall.woff") format('woff');
+}
+
+@font-face {
+  font-family: "awesome";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/AwesomeSerif-BoldTall.woff2") format('woff2'),
+        url("../fonts/AwesomeSerif-BoldTall.woff") format('woff');
+}
+
+@font-face {
+  font-family: "awesome-alt";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/AwesomeSerif-BoldRegular.woff2") format('woff2'),
+        url("../fonts/AwesomeSerif-BoldRegular.woff") format('woff');
+}
+
+@font-face {
+  font-family: "awesome-tall";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/AwesomeSerif-BoldExtraTall.woff2") format('woff2'),
+        url("../fonts/AwesomeSerif-BoldExtraTall.woff") format('woff');
+}
+
+
+body {
+  font: var(--body);
+  color: var(--text,var(--navy));
+  -webkit-font-smoothing: antialiased;
+  max-width: 1920px;
+  margin: 0 auto;
+  background-color: #fff;
+}
+
+*{
+  color: var(--text,var(--navy));
+}
+
+button {
+  font: var(--body);
+}
+
+a {
+  color: var(--link);
+  text-decoration-thickness: 0.0625rem;
+  text-underline-offset: 0.25em;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+ol,
+ul {
+  padding: 0 0 0 1.5em;
+}
+
+.tall {
+  li {
+    line-height: 2rem;
+  }
+}
+h1, h2, h3, h4, h5, h6 {
+  margin-block: 2em 0.5em;
+
+  + p {
+    margin-top: 0;
+  }
+}
+
+h1,
+.h1 {
+  font: var(--h1);
+  letter-spacing: 2.56px;
+  color: var(--heading,var(--blue));
+}
+
+h2,
+.h2 {
+  font: var(--h2);
+  letter-spacing: 1.6px;
+  color: var(--heading,var(--blue));
+}
+
+h3,
+.h3 {
+  font: var(--h3);
+  letter-spacing: 1.28px;
+  color: var(--heading,var(--blue));
+}
+
+h4,
+.h4 {
+  font: var(--h4);
+  letter-spacing: normal;
+  color: var(--heading,var(--blue));
+  text-decoration-thickness: 0.15rem;
+}
+
+h5,
+.h5 {
+  font: var(--h5);
+  color: var(--heading,var(--blue));
+}
+
+.t-intro {
+  font-family: var(--obvia);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 150%;
+  color: var(--blue);
+
+  @media (--lg) {
+    font-size: 28px;
+    line-height: 42px; 
+    
+  }
+}
+
+.h1, .h2, .h3, h1, h2, h3 {
+  em {
+    color: var(--heading, var(--blue));
+  }
+}

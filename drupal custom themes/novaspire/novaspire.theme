@@ -1,0 +1,110 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming.
+ */
+
+/**
+ * Implements hook_preprocess_page().
+ */
+
+function novaspire_preprocess_page(&$variables) {
+  // Get taxonomy term page title
+  $request = \Drupal::request();
+  $route_match = \Drupal::routeMatch();
+  $page_title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+  $variables['current_page_title'] = $page_title;
+
+  // Check if we are on a taxonomy term page.
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.taxonomy_term.canonical') {
+    // Get the taxonomy term from the route.
+    $term = \Drupal::routeMatch()->getParameter('taxonomy_term');
+
+    if ($term && $term->bundle() == 'news_taxonomy') {
+      // Get the term ID.
+      $term_id = $term->id();
+
+      // Load the view for the specific term.
+      $view = \Drupal\views\Views::getView('news_listing');
+      if (is_object($view)) {
+        $view->setDisplay('block_2'); // Change to the display ID you want.
+        $view->setArguments([$term_id]);
+        $view->preExecute();
+        $view->execute();
+
+        // Render the view and replace the page content.
+        $variables['news_taxonomy_view'] = \Drupal::service('renderer')->render($view->render());
+
+        // // Render the view and replace the page content.
+        // $variables['page']['content']['#markup'] = \Drupal::service('renderer')->render($view->render());
+      }
+    }
+  }
+}
+
+
+
+/**
+ * Implements novaspire_suggestions_HOOK_alter() for taxonomy term pages.
+ */
+function novaspire_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  if ($node = \Drupal::routeMatch()->getParameter('taxonomy_term')) {
+    if ($node instanceof \Drupal\taxonomy\TermInterface && $node->bundle() == 'news_taxonomy') {
+      $suggestions[] = 'page__taxonomy_term__news_taxonomy';
+    }
+  }
+}
+
+function novaspire_preprocess_views_view(&$variables) {
+  if ($variables['view']->id() == 'events_listing' || $variables['view']->id() == 'featured_events') {
+    // Iterate over the rows in the view result.
+    foreach ($variables['view']->result as $key => $row) {
+      // Access the start and end dates from field_date_range.
+      if (isset($row->_entity->field_date_range->value)) {
+        $start_date_raw = $row->_entity->field_date_range->value;
+        $end_date_raw = $row->_entity->field_date_range->end_value;
+
+        try {
+          // Create DrupalDateTime objects with the original timezone (New York).
+          $start_date = new \Drupal\Core\Datetime\DrupalDateTime($start_date_raw, new \DateTimeZone('America/New_York'));
+          $end_date = new \Drupal\Core\Datetime\DrupalDateTime($end_date_raw, new \DateTimeZone('America/New_York'));
+
+          // Convert to the target timezone (Alaska Time).
+          $target_timezone = new \DateTimeZone('America/Anchorage');
+          $start_date->setTimezone($target_timezone);
+          $end_date->setTimezone($target_timezone);
+
+          // Format the dates if necessary and store them in custom variables.
+          $variables['view']->result[$key]->_entity->custom_start_date_raw = $start_date->format('Y-m-d H:i:s');
+          $variables['view']->result[$key]->_entity->custom_end_date_raw = $end_date->format('Y-m-d H:i:s');
+        } catch (\Exception $e) {
+          // Handle exceptions if the date conversion fails.
+          \Drupal::logger('novaspire')->error('Date conversion error: @message', ['@message' => $e->getMessage()]);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for field templates.
+ */
+function novaspire_preprocess_field(&$variables) {
+  // Check if the field is 'field_stats_number'.
+  if ($variables['element']['#field_name'] == 'field_stats_number') {
+
+    // Access the field value from the correct location.
+    $value = $variables['items'][0]['content']['#context']['value'] ?? '';
+
+    // Split the string into numbers and non-numeric characters.
+    $parts = [];
+    if (!empty($value)) {
+      preg_match_all('/(\d+|\D+)/', $value, $matches);  // Match numbers and characters.
+      $parts = $matches[0];  // Extract the matched parts.
+    }
+
+    // Pass the split parts to the template.
+    $variables['split_parts'] = $parts;
+  }
+}

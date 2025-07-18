@@ -1,0 +1,140 @@
+@import "sanitize.css";
+
+:root {
+  cursor: auto;
+  scroll-behavior: smooth;
+  scroll-padding-top: 8.5rem;
+
+  @media print {
+    * {
+      background-image: none !important;
+      color: #000 !important;
+    }
+  
+    body {
+      margin: 0;
+      color: #000 !important;
+      background-color: #fff;
+    }
+  
+    .Header {
+      padding-bottom: 5rem;
+    }
+  
+    [data-minimodal], img, svg {
+      display: none !important;
+    }
+  
+    img.print, svg.print {
+      display: block;
+      max-width: 100%;
+    }
+  
+    h1 {
+      break-before: always;
+    }
+    table, img, svg {
+      break-inside: avoid;
+    }
+
+    .Header,
+    .HeroCarousel,
+    .Splash,
+    .pin-spacer,
+    .TestimonialSlider__slider,
+    .CardSlider__slider,
+    .FindProgram > div:last-child,
+    .Media__play,
+    .ImageSlider__slider,
+    .Feed {
+      display: none !important;
+      overflow: hidden !important;
+      visibility: hidden !important;
+    }
+  }
+}
+
+*:focus-visible {
+  outline: var(--text) dashed .25rem;
+  outline-offset: .25rem;
+}
+
+iframe,
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+iframe,
+video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+blockquote,
+fieldset,
+figure,
+legend {
+  margin-inline: 0;
+  padding: 0;
+  border: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  max-width: 100%;
+  border-radius: 0;
+  color: inherit;
+  font: inherit;
+  text-overflow: ellipsis;
+}
+
+/* clears the ‘X’ from Chrome */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration { 
+  display: none; 
+}
+
+/* clears the ‘X’ from Internet Explorer */
+input[type=search]::-ms-clear { 
+  display: none; 
+  width : 0; 
+  height: 0; 
+}
+input[type=search]::-ms-reveal { 
+  display: none; 
+  width : 0; 
+  height: 0; 
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  cursor: pointer;
+}
+
+hr {
+  display: block;
+  margin: 2rem 0;
+  border: 0;
+  border-top: 4px solid var(--blue);
+
+  &.hr-light {
+    border-top: 3px solid var(--cyan);
+  }
+  &.hr-transparent {
+    border-top: 2px solid rgba(0, 45, 114, 0.30);
+  }
+}
+
+::placeholder {
+  opacity: 1;
+}

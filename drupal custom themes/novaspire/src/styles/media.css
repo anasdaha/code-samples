@@ -1,0 +1,8 @@
+@custom-media --sm (width >= 32em);
+@custom-media --md (width >= 48em);
+@custom-media --lg (width >= 64em);
+@custom-media --xl (width >= 80em);
+@custom-media --xxl (width >= 120em);
+@custom-media --xxxl (width >= 140em);
+
+@custom-selector :--heading h1, h2, h3, h4, h5, h6;

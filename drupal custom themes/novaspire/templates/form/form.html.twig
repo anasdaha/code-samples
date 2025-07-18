@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Theme override for a 'form' element.
+ *
+ * Available variables
+ * - attributes: A list of HTML attributes for the wrapper element.
+ * - children: The child elements of the form.
+ *
+ * @see template_preprocess_form()
+ */
+#}
+<form{{ attributes }} class="header__form">
+  <label class="header__label">
+    {{ children }}
+    <button class="header__submit">Search</button>
+  </label>
+</form>

@@ -1,0 +1,46 @@
+---
+import '@styles/global.css';
+import favicon from '@images/favicon.ico';
+
+await Astro.glob('../components/*.astro');
+
+interface Props {
+  title: string;
+  alerts?: boolean;
+}
+
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import Alert from '@components/Alert.astro';
+
+const { title, alerts } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{title} - Novaspire</title>
+    <link rel="icon" type="image/x-icon" href={favicon}>
+    <link rel="stylesheet" href="https://use.typekit.net/klk8sxw.css">
+    <script src="https://cdn.jsdelivr.net/npm/add-to-calendar-button@2" async defer></script>
+  </head>
+  <body>
+    {alerts &&
+      <Alert primary />
+      <Alert primary alt />
+      <Alert secondary />
+    }
+    <a href="#content" class="Button screen-reader-text skip-link">Skip to main content</a>
+    <Header />
+    <main id="content">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<script>
+  import '@scripts/global';
+</script>

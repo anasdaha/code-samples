@@ -1,0 +1,68 @@
+{#
+/**
+ * @file
+ * Theme override to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ */
+#}
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+<div class="faculty-list">
+  <div class="faculty-grid">
+{% for row in rows %}
+  <div class="profile" data-finder-item="show" 
+  {% if loop.index == 1 %}
+    data-finder-limit
+  {% endif %}
+  >
+    {% if row.content['#row']._entity.field_media_image is not empty %}
+      {% set media_entity = row.content['#row']._entity.field_media_image.entity %}
+      {% if media_entity.field_media_image is not empty %}
+        {% set image_file = media_entity.field_media_image.entity %}
+        {% set image_url = file_url(image_file.uri.value)%}
+        <div class="profile__image frame" data-ratio="1:1">
+          <img src="{{ image_url }}" alt="{{ media_entity.field_media_image.alt }}">
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="profile__image frame" data-ratio="1:1">
+        <img src="{{ base_path ~ directory }}/dist/assets/blue-bg.jpg" alt="">
+      </div>
+    {% endif %}
+    <div class="profile__text">
+        <h3 class="h4 link-cta"><a href="{{path('entity.node.canonical', {'node': row.content['#row'].nid }) }}">{{ row.content['#row']._entity.field_first_name[0].value|raw }} {{ row.content['#row']._entity.field_last_name[0].value|raw }}</a></h3>
+      {% if row.content['#row']._entity.field_title[0].value|render %}
+        <p>{{ row.content['#row']._entity.field_title[0].value|raw }}</p>
+      {% endif %}
+      {% if row.content['#row']._entity.field_phone[0].value|render %}
+        <div class="phone">
+          <p><a href="tel:{{ row.content['#row']._entity.field_phone[0].value|striptags|trim|replace({'-': ''})|replace({'(': ''})|replace({')': ''})|raw }}" class="link-underline">{{ row.content['#row']._entity.field_phone[0].value|raw }}</a></p>
+        </div>
+      {% endif %}
+      {% if row.content['#row']._entity.field_email[0].value|render %}
+        <div class="contacts"> 
+          <p><a href="mailto:{{ row.content['#row']._entity.field_email[0].value|striptags|trim|raw }}" class="link-underline">{{ row.content['#row']._entity.field_email[0].value|raw }}</a></p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endfor %}
+  </div>
+  <p class="results__message" data-finder-count></p>
+</div>
+<div class="bottom-load">
+  <button class="Button Button--navy" data-finder-more="4">
+    <span>{{ 'Load More Faculty'|t }}</span>
+  </button>
+</div>

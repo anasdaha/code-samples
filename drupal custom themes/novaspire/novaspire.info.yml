@@ -1,0 +1,28 @@
+name: novaspire
+type: theme
+version: VERSION
+core_version_requirement: ^9 || ^10
+base theme: false
+
+libraries:
+  - novaspire/global-styling
+
+regions:
+  admin_tabs: 'Before Header'
+  alert: 'Site Logo'
+  header: 'Header'
+  primary_menu: 'Primary Menu'
+  secondary_menu: 'Secondary Menu'
+  tertiary_menu: 'Tertiary Menu'
+  highlighted: 'Highlighted'
+  breadcrumb: 'Breadcrumb'
+  content: 'Content'
+  content_bottom: 'Content Bottom'
+  sidebar_first: 'Sidebar First'
+  sidebar_second: 'Sidebar Second'
+  footer: 'Footer Menu'
+  footer_blocks: 'Footer Content'
+  footer_bottom: 'Footer Bottom'
+  footer_social: 'Footer Social'
+  sidebar_menu: 'Sidebar Menu'
+  news_sidebar: 'None'
