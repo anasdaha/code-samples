@@ -1,0 +1,55 @@
+{#
+/**
+ * @file
+ * Theme override to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ */
+#}
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+<div class="VisualRouter">
+  {% for row in rows %}
+    <div class="VisualRouter__item">
+      <div class="VisualRouter__image">
+        <figure class="Image">
+          {{ row.content }}
+        </figure>
+      </div>
+      <blockquote>
+        {{ row.content['#row']._entity.field_quote[0].value|raw }}
+        <cite>
+          {% if row.content['#row']._entity.field_name[0].value %}
+            <strong>{{ row.content['#row']._entity.field_name[0].value|raw }}</strong><br>
+          {% endif %}
+          {{ row.content['#row']._entity.field_title_department[0].value|raw }}
+        </cite>
+        {% set raw_url = row.content['#row']._entity.field_cta[0].value.uri %}
+        {% if  'internal:' in raw_url %}
+          {% set url = raw_url|split(':')[1] %}
+        {% elseif 'entity:' in raw_url %}
+          {% set url = path('entity.node.canonical', {'node': raw_url|split(':')[1]|split('/')[1]}) %}
+        {% else %}
+          {% set url = raw_url %}
+        {% endif %}
+        {% if url %}
+          <div class="Buttons Buttons--alt">
+            <a href="{{ url }}" class="Button"
+              target="{{row.content['#row']._entity.field_cta[0].value.options.attributes.target}}"
+            >{{row.content['#row']._entity.field_cta[0].value.title|raw}}</a>
+          </div>
+        {% endif %}
+      </blockquote>
+    </div>
+  {% endfor %}
+</div>

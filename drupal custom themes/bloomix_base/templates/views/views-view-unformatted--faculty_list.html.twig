@@ -1,0 +1,52 @@
+{#
+/**
+ * @file
+ * Theme override to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ */
+#}
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+<div class="Posts" id="load-items">
+  {% for row in rows %}
+    {% set show = 'show' %}
+    <div class="FacultyCard flush {{show}}">
+      {% if row.content['#row']._entity.field_media[0].value %}
+        <div class="Image">
+          {{ row.content }}
+        </div>
+      {% endif %}
+      <div class="FacultyCard__details Common flush">
+        {% if row.content['#row']._entity.title[0].value %}
+          <h2 class="FacultyCard__name">
+            <a href="{{ path('entity.node.canonical', {'node': row.content['#row']._entity.nid.value}) }}">{{ row.content['#row']._entity.title[0].value }}</a>
+          </h2>
+        {% endif %}
+        {% if row.content['#row']._entity.field_designation.value %}
+          <p class="FacultyCard__title"><strong>{{ row.content['#row']._entity.field_designation.value }}</strong></p>
+        {% endif %}
+        {% if row.content['#row']._entity.field_email.value or row.content['#row']._entity.field_phone.value %}
+        <div class="FacultyCard__contact">
+          {% if row.content['#row']._entity.field_email.value %}
+            <p><a href="mailto:{{row.content['#row']._entity.field_email.value|raw}}">{{ row.content['#row']._entity.field_email.value }}</a></p>
+          {% endif %}
+          {% if row.content['#row']._entity.field_phone.value %}
+            <p><a href="tel:{{row.content['#row']._entity.field_phone.value|raw|striptags|trim|replace({'-': ''})|replace({'(': ''})|replace({')': ''})|replace({' ': ''})|raw}}">{{ row.content['#row']._entity.field_phone.value }}</a></p>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</div>

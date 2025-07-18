@@ -161,6 +161,7 @@ bloomix_base/
 ├── favicon.ico
 ├── bloomix_base.info.yml
 ├── bloomix_base.theme
+├── bloomix_base.layouts.yml
 └── bloomix_base.libraries.yml
 
 **Use Cases:**

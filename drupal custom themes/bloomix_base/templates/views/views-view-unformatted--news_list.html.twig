@@ -1,0 +1,40 @@
+{#
+/**
+ * @file
+ * Theme override to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ */
+#}
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+<div class="Posts">
+  {% for row in rows %}
+    <div class="Posts__item">
+      {% if row.content['#row']._entity.fields.field_media.value %}
+        <figure class="Image">
+          {{ row.content }}
+        </figure>
+      {% endif %}
+      <div class="flush">
+        {% if row.content['#row']._entity.field_news_taxonomy[0].value.target_id %}
+          {% set term = drupal_entity('taxonomy_term', row.content['#row']._entity.field_news_taxonomy[0].value.target_id) %}
+          <p class="meta meta--alt">{{ term['#taxonomy_term'].name.value }}</p>
+        {% endif %}
+        <h3 class="Posts__title">
+          <a href="{{ path('entity.node.canonical', {'node': row.content['#row']._entity.nid.value}) }}" class="link-underline-show link-cover">{{ row.content['#row']._entity.title[0].value }}</a>
+        </h3>
+      </div>
+    </div>
+  {% endfor %}
+</div>

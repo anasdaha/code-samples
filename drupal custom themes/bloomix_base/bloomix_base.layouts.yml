@@ -1,0 +1,15 @@
+layout_twocol:
+  label: 'Two Column'
+  category: 'Custom'
+  path: layouts/ck_twocol
+  template: layout--ck-twocol
+  library: bloomix_base/twocol
+  default_region: first
+  icon_map:
+    - [first, second]
+  regions:
+    first:
+      label: 'First Column'
+    second:
+      label: 'Second Column'
+

@@ -1,0 +1,95 @@
+{#
+/**
+ * @file
+ * Theme override to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ *
+ * @see template_preprocess_node()
+ *
+ */
+#}
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+  ]
+%}
+<div class="Byline">
+  <p>
+    {% if content.field_author_name|render  %}
+      <em>{{ 'By '|t}}{{ content.field_author_name|render|striptags|trim|raw }}</em>
+    {% endif %}
+    {% if content.field_author_email|render  %}
+      <a href="mailto:{{ content.field_author_email|render|striptags|trim|raw }}" target="_blank" class="Widget__icon">
+        <span>
+          <span class="invis">{{ 'Email '|t}}{{ content.field_author_name|render|striptags|trim|raw }}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 13">
+            <path fill="#000" d="M2.106 0h13.786c.038.006.075.015.113.019.338.036.66.134.96.31.109.065.11.084.013.175l-.035.031C14.477 2.767 12.01 4.997 9.545 7.23c-.353.319-.738.319-1.091 0L2.768 2.085 1.028.512C.92.412.922.396 1.045.324c.183-.107.377-.182.577-.238.16-.045.324-.054.485-.086ZM0 11.119V1.883c.05-.34.157-.652.348-.93C.415.857.461.85.548.928c2.01 1.823 4.024 3.643 6.036 5.463.12.11.12.11 0 .219L.555 12.064c-.116.104-.12.103-.212-.027A2.092 2.092 0 0 1 0 11.119Z"></path>
+            <path fill="#000" d="M8.995 13H2.32a2.48 2.48 0 0 1-1.25-.307c-.157-.09-.159-.1-.024-.223l4.97-4.495c.351-.317.703-.631 1.05-.952.08-.073.135-.077.215-.002.238.223.482.437.723.655a1.458 1.458 0 0 0 1.993-.004c.235-.214.474-.423.705-.641.085-.08.145-.083.234-.002.833.759 1.67 1.513 2.505 2.27l3.496 3.162.044.04c.093.088.092.106-.011.167-.3.178-.62.28-.96.311-.17.017-.342.02-.514.02H8.995ZM18 6.495v4.416c0 .42-.115.797-.347 1.131-.085.124-.094.126-.204.025l-3.497-3.161-2.533-2.293c-.124-.112-.124-.113.001-.227L17.422.955c.143-.13.144-.129.252.034.216.325.326.687.325 1.09v4.415Z"></path>
+          </svg>
+        </span>
+      </a>
+    {% endif %}
+  </p>
+  {{ content|without(
+    'field_author_name',
+    'field_author_email'
+  ) }}
+</div>

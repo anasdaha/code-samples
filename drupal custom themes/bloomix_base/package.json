@@ -1,0 +1,25 @@
+{
+  "name": "build",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host",
+    "start": "astro dev",
+    "build": "astro build --base '/themes/custom/bloomix_base/dist/'",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "devDependencies": {
+    "@types/flickity": "^2.2.11",
+    "astro": "^4.16.10",
+    "lightningcss": "^1.25.1"
+  },
+  "dependencies": {
+    "automodal": "^0.3.0",
+    "countup.js": "^2.8.0",
+    "flexscroll": "^0.4.0",
+    "flickity": "^3.0.0",
+    "flickity-sync": "^3.0.0",
+    "focus-trap": "^7.5.4"
+  }
+}

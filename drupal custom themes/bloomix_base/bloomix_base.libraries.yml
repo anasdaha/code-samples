@@ -1,0 +1,16 @@
+global-styling:
+  version: VERSION
+  css:
+    theme:
+      dist/assets/all.css: {}
+      css/custom.css: {}
+
+  js:
+    dist/assets/script.js: { attributes: { type: module } }
+    js/custom.js: {}
+
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+

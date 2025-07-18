@@ -1,0 +1,118 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a paragraph.
+ *
+ * Available variables:
+ * - paragraph: Full paragraph entity.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - paragraph.getCreatedTime() will return the paragraph creation timestamp.
+ *   - paragraph.id(): The paragraph ID.
+ *   - paragraph.bundle(): The type of the paragraph, for example, "image" or "text".
+ *   - paragraph.getOwnerId(): The user ID of the paragraph author.
+ *   See Drupal\paragraphs\Entity\Paragraph for a full list of public properties
+ *   and methods for the paragraph object.
+ * - content: All paragraph items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - paragraphs: The current template type (also known as a "theming hook").
+ *   - paragraphs--type-[type]: The current paragraphs type. For example, if the paragraph is an
+ *     "Image" it would result in "paragraphs--type--image". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - paragraphs--view-mode--[view_mode]: The View Mode of the paragraph; for example, a
+ *     preview would result in: "paragraphs--view-mode--preview", and
+ *     default: "paragraphs--view-mode--default".
+ * - view_mode: View mode; for example, "preview" or "full".
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_paragraph()
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+    'Section',
+    'Section--black',
+    content.field_header_left_align|render|striptags|trim == 'True' ? '' : 'Section--centered'
+  ]
+%}
+{% block paragraph %}
+  <section{{ attributes.addClass(classes) }}>
+    {% block content %}
+      <div class="Section__header flush">
+        {% if content.field_title|render %}
+          {% if content.field_heading_tag|render %}
+            {% set tag = content.field_heading_tag|render|striptags|trim %}
+          {% else %}
+            {% set tag = 'h2' %}
+          {% endif %}
+          <{{tag}} class="h2">{{ content.field_title|render|striptags|trim|raw  }}</{{tag}}>
+        {% endif %}
+        {% if content.field_description|render %}
+          <div class="Common flush">
+            {{ content.field_description|render }}
+          </div>
+        {% endif %}
+      </div>
+      {% if content.field_slides|render %}
+        <div class="Section__main flush">
+          <div class="TimelineCarousel">
+            <div data-flexscroll>
+              <div data-flexscroll-viewport>
+                {% for key, item in content.field_slides['#items'] %}
+                  <div data-flexscroll-item data-flexscroll-title="{{ content.field_slides[key]['#paragraph'].field_title.value|raw }}">
+                    <figure class="Image">
+                      {% if content.field_slides[key]['#paragraph'].field_media.entity.field_media_image.entity.uri.value|render %}
+                        {# <img src="{{ file_url(content.field_slides[key]['#paragraph'].field_media.entity.field_media_image.entity.uri.value) }}"
+                        width="1600" height="900" 
+                        alt="{{ content.field_slides[key]['#paragraph'].field_media.entity.field_media_image.alt}}"> #}
+                        {{ content.field_slides[key] }}
+                        {% if content.field_slides[key]['#paragraph'].field_caption.value|raw %}
+                          <figcaption class="Common flush">
+                            {{ content.field_slides[key]['#paragraph'].field_caption.value|raw }}
+                          </figcaption>
+                        {% endif %}
+                      {% endif %}
+                    </figure>
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="flexscroll-area scrolled">
+                <div data-flexscroll-dots>
+                  {% for key, item in content.field_slides['#items'] %}
+                    <button data-flexscroll-goto aria-label="{{key}}"></button>
+                  {% endfor %}
+                </div>
+              </div>
+              <div data-flexscroll-counter></div>
+              <div data-flexscroll-nav>
+                <button data-flexscroll-prev aria-label="Previous"></button>
+                <button data-flexscroll-next aria-label="Next"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      {{ content|without(
+        'field_slides',
+        'field_description',
+        'field_title',
+        'field_header_left_align',
+        'field_heading_tag'
+      ) }}
+    {% endblock %}
+  </section>
+{% endblock paragraph %}

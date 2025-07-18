@@ -1,0 +1,115 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a paragraph.
+ *
+ * Available variables:
+ * - paragraph: Full paragraph entity.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - paragraph.getCreatedTime() will return the paragraph creation timestamp.
+ *   - paragraph.id(): The paragraph ID.
+ *   - paragraph.bundle(): The type of the paragraph, for example, "image" or "text".
+ *   - paragraph.getOwnerId(): The user ID of the paragraph author.
+ *   See Drupal\paragraphs\Entity\Paragraph for a full list of public properties
+ *   and methods for the paragraph object.
+ * - content: All paragraph items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - paragraphs: The current template type (also known as a "theming hook").
+ *   - paragraphs--type-[type]: The current paragraphs type. For example, if the paragraph is an
+ *     "Image" it would result in "paragraphs--type--image". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - paragraphs--view-mode--[view_mode]: The View Mode of the paragraph; for example, a
+ *     preview would result in: "paragraphs--view-mode--preview", and
+ *     default: "paragraphs--view-mode--default".
+ * - view_mode: View mode; for example, "preview" or "full".
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_paragraph()
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+    'Hero',
+    'Hero--home',
+    'Hero--tall',
+    'theme-dark'
+  ]
+%}
+{% block paragraph %}
+  <section{{ attributes.addClass(classes) }}>
+    {% block content %}
+      <div class="Hero__wrapper">
+        {% if content.field_video[0] %}
+          <div class="Hero__background">
+            {% if content.field_video[0]['#media'].field_media_oembed_video.value %}
+              {% set video_url = content.field_video[0]['#media'].field_media_oembed_video.value %}
+              {% set trimmed_url = video_url|replace({
+                'https://youtu.be/': '',
+                'https://www.youtube.com/watch?v=': '',
+                'https://youtube.com/watch?v=': ''
+              }) %}
+              {% set video_id = trimmed_url|split('&')|first %}
+              <div id="yt-player" data-video-id="{{ video_id }}"></div>
+            {% elseif content.field_video[0]['#media'].field_media_video_file.entity.uri.value %}
+              <video src="{{ file_url(content.field_video[0]['#media'].field_media_video_file.entity.uri.value) }}" 
+              autoplay loop muted playsInline></video>
+            {% endif %}
+          </div>
+          <button class="Hero__control" aria-label="Toggle video" id="yt-control"></button>
+        {% elseif content.field_cdn_video|render %}
+          <div class="Hero__background">
+            <video autoplay muted loop playsinline width="100%">
+              <source src="{{ video_url }}" type="video/mp4">
+            </video>
+            <button class="Hero__control" aria-label="Toggle video" id="cdn-control"></button>
+          </div>
+        {% else %}
+          {% if content.field_media|render %}
+            <div class="Hero__background">
+              {{ content.field_media|render}}
+            </div>
+          {% endif %}
+        {% endif %}
+        <div class="Hero__main-content Common flush {{content.field_cta|render ? '':'without-cta'}}" data-animate data-animation="fade-in-up">
+          {% if content.field_title|render %}
+            <h1>{{ content.field_title|render|striptags|trim|raw }}</h1>
+          {% endif %}
+          {% if content.field_cta|render %}
+            <div class="Buttons Buttons--alt">
+              <a href="{{ cta_file_url ? cta_file_url : content.field_cta[0]['#url'] }}" target="{{ content.field_cta[0]['#url'].options['attributes']['target'] }}" class="Button">{{ content.field_cta[0]['#title'] }}</a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      {% if content.field_links|render %}
+        <ul class="Hero__posts">
+          {% if content.field_links[0]|render %}
+            <li><a href="{{ cta_file_url_1 ? cta_file_url_1 : content.field_links[0]['#url'] }}" target="{{ content.field_links[0]['#url'].options['attributes']['target'] }}" class="link-underline-swipe">{{ content.field_links[0]['#title'] }}</a></li>
+          {% endif %}
+          {% if content.field_links[1]|render %}
+            <li><a href="{{ cta_file_url_2 ? cta_file_url_2 : content.field_links[1]['#url'] }}" target="{{ content.field_links[1]['#url'].options['attributes']['target'] }}" class="link-underline-swipe">{{ content.field_links[1]['#title'] }}</a></li>
+          {% endif %}
+          {% if content.field_links[2]|render %}
+            <li><a href="{{ cta_file_url_3 ? cta_file_url_3 : content.field_links[2]['#url'] }}" target="{{ content.field_links[2]['#url'].options['attributes']['target'] }}" class="link-underline-swipe">{{ content.field_links[2]['#title'] }}</a></li>
+          {% endif %}
+        </ul>
+      {% endif %}
+      {{ content|without('field_cta', 'field_title', 'field_video', 'field_links', 'field_cdn_video', 'field_media') }}
+    {% endblock %}
+  </section>
+{% endblock paragraph %}

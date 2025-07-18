@@ -1,0 +1,194 @@
+{#
+/**
+ * @file
+ * Theme override to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ *
+ * @see template_preprocess_node()
+ *
+ */
+#}
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+  ]
+%}
+<main{{ attributes.addClass(classes) }}>
+  <section class="Hero Hero--program {{content.field_dark_theme|render|striptags|trim == 'True' ? 'theme-dark': ''}}">
+    <div class="Hero__wrapper">
+      <div class="Hero__background">
+        {{ content.field_media|render }}
+      </div>
+      <div class="Common">
+        <div class="columns">
+          <div class="Hero__main-content flush">
+            {{ title_prefix }}
+            {% if label %}
+              <h1>{{ label|render|striptags|trim|raw }}</h1>
+            {% endif %}
+            {{ title_suffix }}
+            {{ content.field_short_description|render }}
+            {% if content.field_cta|render  %}
+              <div class="Buttons">
+                <a href="{{ cta_file_url ? cta_file_url : content.field_cta[0]['#url'] }}" target="{{ content.field_cta[0]['#url'].options['attributes']['target']  }}" class="Button">{{ content.field_cta[0]['#title'] }}</a>
+              </div>
+            {% endif %}
+          </div>
+          <div>
+            <div class="columns">
+              {% if content.field_application_deadline|render %}
+                <div class="Hero__program-list">
+                  <h2 class="h5">{{ 'Application Deadline'|t }}</h2>
+                  <ul>
+                    {% for key, college in content.field_application_deadline['#items'] %}
+                      <li>{{ content.field_application_deadline[key] }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+              {% if content.field_college|render %}
+                <div class="Hero__program-list">
+                  <h2 class="h5">{{ 'College'|t }}</h2>
+                  <ul>
+                    {% for key, college in content.field_college['#items'] %}
+                      <li>
+                        {{content.field_college[key] }}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+              {% if content.field_affiliated_programs|render %}
+                <div class="Hero__program-list">
+                  <h2 class="h5">{{ 'Related Programs'|t }}</h2>
+                  <ul>
+                    {% for key, program in content.field_affiliated_programs['#items'] %}
+                      <li>
+                        {{content.field_affiliated_programs[key] }}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+              {% if content.field_degree_type|render %}
+                <div class="Hero__program-list">
+                  <h2 class="h5">{{ 'Degree Type'|t }}</h2>
+                  <ul>
+                    {% for key, degree in content.field_degree_type['#items'] %}
+                      <li>
+                        {{content.field_degree_type[key] }}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {{ drupal_block('system_breadcrumb_block') }}
+  {{ content.field_a_before_content|render }}
+  <section class="ContentSidebar hide-header">
+    <div class="ContentSidebar__header flush">
+      {{ title_prefix }}
+      {% if label %}
+        <h1>{{ label|render|striptags|trim|raw }}</h1>
+      {% endif %}
+      {{ title_suffix }}
+    </div>
+    <div class="ContentSidebar__subnav flush">
+      {{ drupal_region('tertiary_menu') }}
+    </div>
+    <div class="ContentSidebar__content flush">
+      <div class="Common flush">
+        {% if content.field_program_intro|render %}
+          <h2>{{ 'Program Intro'|t }}</h2>
+          {{ content.field_program_intro|render }}
+        {% endif %}
+        {% if content.field_key_features|render %}
+          <h3>{{ 'Key Features'|t }}</h3>
+          {{ content.field_key_features|render }}
+        {% endif %}
+        </div>
+    </div>
+    <div class="ContentSidebar__sidebar flush">
+      {{ content.field_right_sidebar|render }}
+    </div>
+  </section>
+  {{ content.field_ap_content|render }}
+  {{ content|without(
+    'field_ap_content', 
+    'field_right_sidebar', 
+    'field_program_intro', 
+    'field_key_features',
+    'field_media',
+    'field_cta',
+    'field_short_description',
+    'field_dark_theme',
+    'field_affiliated_programs',
+    'field_degree_type',
+    'field_college',
+    'field_application_deadline',
+    'field_a_before_content'
+  ) }}
+</main>

@@ -1,0 +1,53 @@
+{#
+/**
+ * @file
+ * Theme override to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ */
+#}
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+<div class="Posts" id="load-items">
+  {% for row in rows %}
+    {% if loop.index < 7 %}
+      {% set show = 'show' %}
+    {% else %}
+      {% set show = '' %}
+    {% endif %}
+    <div class="Posts__item Page__item {{show}}">
+      {% set html = row.content['#row']._entity.field_r_description[0].value %}
+      {% set parts = html|split('<img') %}
+      {% if parts|length > 1 %}
+        {% set img_rest = parts[1]|split('>') %}
+        {% set img_tag = '<img' ~ img_rest[0] ~ '>' %}
+        <figure class="Image">
+          {{ img_tag|raw }}
+        </figure>
+      {% endif %}
+      <div class="flush">
+        {% if row.content['#row']._entity.field_publish_date[0].value|render %}
+          <p class="meta meta--alt">{{ row.content['#row']._entity.field_publish_date[0].value|date('M d, Y') }}</p>
+        {% endif %}
+        <h3 class="Posts__title">
+          <a href="{{ row.content['#row']._entity.field_link[0].value }}" target="_blank" class="link-underline-show link-cover">{{ row.content['#row']._entity.title[0].value|raw }}</a>
+        </h3>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% if rows|length > 6 %}
+  <div class="Buttons Buttons--stack">
+    <button class="Button" id="load-more">{{ 'Load More Stories'|t }}</button>
+  </div>
+{% endif %}

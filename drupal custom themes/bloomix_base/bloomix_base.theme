@@ -1,0 +1,249 @@
+<?php
+
+use Drupal\Core\Render\Markup;
+use Drupal\file\Entity\File;
+use Drupal\block_content\Entity\BlockContent;
+use Drupal\file\FileInterface;
+
+/**
+ * @file
+ * Functions to support theming.
+ */
+
+ /**
+ * Implements hook_preprocess_HOOK() for menus.
+ */
+function bloomix_base_preprocess_menu(&$variables) {
+  // Get the menu machine name (e.g., 'main' for Main Navigation).
+  $menu_name = $variables['menu_name'];
+
+  // Load the menu storage service.
+  $menu_storage = \Drupal::entityTypeManager()->getStorage('menu');
+
+  // Load the menu entity.
+  $menu = $menu_storage->load($menu_name);
+
+  // Add the menu title to the variables if the menu exists.
+  if ($menu) {
+    $variables['menu_title'] = $menu->label();
+  }
+}
+
+/**
+ * Implements hook_preprocess_views_view().
+ */
+function bloomix_base_preprocess_views_view_unformatted(&$variables) {
+  if ($variables['view']->id() === 'latest_news' && $variables['view']->current_display === 'block_1') {
+    // Get the argument passed to the view.
+    $field_image_url = $variables['view']->args[1];
+    $variables['field_image_url'] = $field_image_url;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page templates.
+ */
+function bloomix_base_preprocess_page(&$variables) {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if ($node instanceof \Drupal\node\NodeInterface && $node->bundle() === 'program_tiles') {
+    if (\Drupal::currentUser()->isAnonymous()) {
+      $response = new \Symfony\Component\HttpFoundation\RedirectResponse('/');
+      $response->send();
+      exit;
+    }
+  }
+}
+
+/**
+ * Preprocess for all nodes.
+ */
+function bloomix_base_preprocess_node(array &$variables) {
+  $node = $variables['node'];
+  _bloomix_base_process_cta_field($variables, $node, 'field_cta', 'cta_file_url');
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function bloomix_base_preprocess_block(array &$variables) {
+  if (isset($variables['content']['#block_content'])) {
+    $block = $variables['content']['#block_content'];
+    _bloomix_base_process_cta_field($variables, $block, 'field_a_cta', 'cta_file_url');
+    _bloomix_base_process_cta_field($variables, $block, 'field_contact_us', 'cta_file_url');
+    _bloomix_base_process_cta_field($variables, $block, 'field_cta', 'cta_file_url');
+  }
+
+
+  $provider = $variables['elements']['#configuration']['provider'] ?? '';
+
+  // Check if this is a custom block (Block Content).
+  if ($provider === 'block_content' && isset($variables['elements']['content']['#block_content'])) {
+    /** @var \Drupal\block_content\Entity\BlockContent $block_content */
+    $block_content = $variables['elements']['content']['#block_content'];
+
+    // If the field_target field exists and is not empty, store it in a global.
+    if ($block_content->hasField('field_target') && !$block_content->get('field_target')->isEmpty()) {
+      $GLOBALS['f_target'] = $block_content->get('field_target')->value;
+    }
+    if ($block_content->hasField('field_instagram_target') && !$block_content->get('field_instagram_target')->isEmpty()) {
+      $GLOBALS['i_target'] = $block_content->get('field_instagram_target')->value;
+    }
+    if ($block_content->hasField('field_x_target') && !$block_content->get('field_x_target')->isEmpty()) {
+      $GLOBALS['x_target'] = $block_content->get('field_x_target')->value;
+    }
+    if ($block_content->hasField('field_linkedin_target') && !$block_content->get('field_linkedin_target')->isEmpty()) {
+      $GLOBALS['ln_target'] = $block_content->get('field_linkedin_target')->value;
+    }
+    if ($block_content->hasField('field_youtube_target') && !$block_content->get('field_youtube_target')->isEmpty()) {
+      $GLOBALS['yt_target'] = $block_content->get('field_youtube_target')->value;
+    }
+    if ($block_content->hasField('field_threads_target') && !$block_content->get('field_threads_target')->isEmpty()) {
+      $GLOBALS['t_target'] = $block_content->get('field_threads_target')->value;
+    }
+    if ($block_content->hasField('field_bluesky_target') && !$block_content->get('field_bluesky_target')->isEmpty()) {
+      $GLOBALS['bs_target'] = $block_content->get('field_bluesky_target')->value;
+    }
+    if ($block_content->hasField('field_more_target') && !$block_content->get('field_more_target')->isEmpty()) {
+      $GLOBALS['m_target'] = $block_content->get('field_more_target')->value;
+    }
+  }
+
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for social-media-links-platforms.html.twig.
+ */
+function bloomix_base_preprocess_social_media_links_platforms(array &$variables) {
+  // Set the target attribute from global variable if available
+  $variables['f_target'] = $GLOBALS['f_target'] ?? '_self';
+  $variables['i_target'] = $GLOBALS['i_target'] ?? '_self';
+  $variables['x_target'] = $GLOBALS['x_target'] ?? '_self';
+  $variables['ln_target'] = $GLOBALS['ln_target'] ?? '_self';
+  $variables['yt_target'] = $GLOBALS['yt_target'] ?? '_self';
+  $variables['t_target'] = $GLOBALS['t_target'] ?? '_self';
+  $variables['bs_target'] = $GLOBALS['bs_target'] ?? '_self';
+  $variables['m_target'] = $GLOBALS['m_target'] ?? '_self';
+}
+
+/**
+ * Preprocess for all paragraph types.
+ */
+function bloomix_base_preprocess_paragraph(array &$variables) {
+  $paragraph = $variables['paragraph'];
+  
+  if ($paragraph->hasField('field_cdn_video') && !$paragraph->get('field_cdn_video')->isEmpty()) {
+    
+    $cdn_url = $paragraph->get('field_cdn_video')->getValue()[0]['uri'];
+    if (!empty($cdn_url) && filter_var($cdn_url, FILTER_VALIDATE_URL)) {
+
+      $html = @file_get_contents($cdn_url);
+      if ($html) {
+        $doc = new \DOMDocument();
+        @$doc->loadHTML($html);
+        $meta_tags = $doc->getElementsByTagName('meta');
+
+        $video_url = null;
+        foreach ($meta_tags as $meta) {
+          if ($meta->getAttribute('property') === 'og:video') {
+            $video_url = $meta->getAttribute('content');
+            break;
+          }
+        }
+
+        if ($video_url) {
+          $variables['video_url'] = $video_url;
+        }
+      }
+    }
+  }
+
+  if ($paragraph->hasField('field_blockquote') && !$paragraph->get('field_blockquote')->isEmpty()) {
+    $referenced_paragraph = $paragraph->get('field_blockquote')->first()->entity;
+
+    if ($referenced_paragraph && $referenced_paragraph->hasField('field_cta') && !$referenced_paragraph->get('field_cta')->isEmpty()) {
+      $link = $referenced_paragraph->get('field_cta')->first();
+      $uri = $link->getUrl()->toString();
+
+      if (preg_match('#/media/(\d+)#', $uri, $matches)) {
+        $media_id = $matches[1];
+        $media = \Drupal::entityTypeManager()->getStorage('media')->load($media_id);
+
+        if ($media && $media->bundle() === 'document' && $media->hasField('field_media_document')) {
+          $file = $media->get('field_media_document')->entity;
+
+          if ($file instanceof \Drupal\file\FileInterface) {
+            $file_uri = $file->getFileUri();
+            $file_url = \Drupal::service('file_url_generator')->generateString($file_uri);
+
+            // Now pass it to the Twig template.
+            $variables['blockquote_cta_file_url'] = $file_url;
+          }
+        }
+      }
+    }
+  }
+
+  _bloomix_base_process_cta_field($variables, $paragraph, 'field_cta', 'cta_file_url');
+  _bloomix_base_process_cta_field($variables, $paragraph, 'field_featured_image_link', 'featured_file_url');
+
+  if ($paragraph->hasField('field_links') && !$paragraph->get('field_links')->isEmpty()) {
+    $links = $paragraph->get('field_links');
+    $index = 1;
+
+    foreach ($links as $link_item) {
+      $uri = $link_item->getUrl()->toString();
+
+      if (preg_match('#/media/(\d+)#', $uri, $matches)) {
+        $media_id = $matches[1];
+        $media = \Drupal::entityTypeManager()->getStorage('media')->load($media_id);
+
+        if ($media && $media->bundle() === 'document' && $media->hasField('field_media_document')) {
+          $file = $media->get('field_media_document')->entity;
+
+          if ($file instanceof \Drupal\file\FileInterface) {
+            $file_uri = $file->getFileUri();
+            $file_url = \Drupal::service('file_url_generator')->generateString($file_uri);
+
+            // Create dynamic variable like cta_file_url_1, cta_file_url_2, etc.
+            $variables['cta_file_url_' . $index] = $file_url;
+          }
+        }
+      }
+      $index++;
+    }
+  }
+}
+
+/**
+ * Helper function to process CTA fields for both nodes and blocks.
+ *
+ * @param array &$variables
+ *   The preprocess variables array.
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The entity (node or block).
+ * @param string $field_name
+ *   The name of the CTA field.
+ * @param string $variable_name
+ *   The name of the variable to set in the template.
+ */
+function _bloomix_base_process_cta_field(array &$variables, $entity, $field_name, $variable_name) {
+  if ($entity->hasField($field_name) && !$entity->get($field_name)->isEmpty()) {
+    $link = $entity->get($field_name)->first();
+    $uri = $link->getUrl()->toString();
+
+    if (preg_match('#/media/(\d+)#', $uri, $matches)) {
+      $media_id = $matches[1];
+      $media = \Drupal::entityTypeManager()->getStorage('media')->load($media_id);
+
+      if ($media && $media->bundle() === 'document' && $media->hasField('field_media_document')) {
+        $file = $media->get('field_media_document')->entity;
+
+        if ($file instanceof File) {
+          $file_uri = $file->getFileUri();
+          $file_url = \Drupal::service('file_url_generator')->generateString($file_uri);
+          $variables[$variable_name] = $file_url;
+        }
+      }
+    }
+  }
+}
