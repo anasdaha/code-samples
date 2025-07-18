@@ -1,0 +1,10 @@
+name: Custom Entities
+description: 'Provides custom entities for website like Demands, Project, Meeting, Recourse, Social, Profile'
+package: Custom
+type: module
+core_version_requirement: ^11
+dependencies:
+  # - drupal:content_moderation
+  - drupal:user
+  - drupal:views
+  - drupal:field_ui

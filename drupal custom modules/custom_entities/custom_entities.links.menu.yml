@@ -1,0 +1,104 @@
+entity.resource.collection:
+  title: 'Resources'
+  description: 'List of Resource entities'
+  parent: system.admin_content
+  route_name: entity.resource.collection
+  weight: 0
+
+custom_entities.admin:
+  title: 'Resource settings'
+  description: 'Configure Resource entity settings.'
+  parent: system.admin_structure
+  route_name: entity.resource.settings
+  weight: 0
+
+entity.project.collection:
+  title: 'Projects'
+  description: 'List of Project entities'
+  parent: system.admin_content
+  route_name: entity.project.collection
+  weight: 1
+
+custom_entities.project_admin:
+  title: 'Project settings'
+  description: 'Configure Project entity settings.'
+  parent: system.admin_structure
+  route_name: entity.project.settings
+  weight: 1
+
+entity.demand.collection:
+  title: 'Demands'
+  description: 'List of Demand entities'
+  parent: system.admin_content
+  route_name: entity.demand.collection
+  weight: 1
+
+custom_entities.demand_admin:
+  title: 'Demand settings'
+  description: 'Configure Demand entity settings.'
+  parent: system.admin_structure
+  route_name: entity.demand.settings
+  weight: 1
+
+entity.social.collection:
+  title: 'Socials'
+  description: 'List of Social entities'
+  parent: system.admin_content
+  route_name: entity.social.collection
+  weight: 1
+
+custom_entities.social_admin:
+  title: 'Social settings'
+  description: 'Configure Social entity settings.'
+  parent: system.admin_structure
+  route_name: entity.social.settings
+  weight: 1
+
+entity.meeting.collection:
+  title: 'Meetings'
+  description: 'List of Meeting entities'
+  parent: system.admin_content
+  route_name: entity.meeting.collection
+  weight: 1
+
+custom_entities.meeting_admin:
+  title: 'Meeting settings'
+  description: 'Configure Meeting entity settings.'
+  parent: system.admin_structure
+  route_name: entity.meeting.settings
+  weight: 1
+entity.profile.settings:
+  title: 'Profile'
+  description: 'Configure a Profile entity type.'
+  route_name:  entity.profile.settings
+  parent: system.admin_structure
+
+entity.profile.collection:
+  title: 'Profiles'
+  description: 'List of profiles.'
+  route_name: entity.profile.collection
+  parent: system.admin_content
+
+entity.event.settings:
+  title: 'Event'
+  description: 'Configure an Event entity type.'
+  route_name:  entity.event.settings
+  parent: system.admin_structure
+
+entity.event.collection:
+  title: 'Events'
+  description: 'List of events.'
+  route_name: entity.event.collection
+  parent: system.admin_content
+
+entity.user_meta.settings:
+  title: 'User Meta'
+  description: 'Configure an User Meta entity type.'
+  route_name:  entity.user_meta.settings
+  parent: system.admin_structure
+
+entity.user_meta.collection:
+  title: 'User Metas'
+  description: 'List of user metas.'
+  route_name: entity.user_meta.collection
+  parent: system.admin_content

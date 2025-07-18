@@ -1,0 +1,286 @@
+entity.resource.collection:
+  path: '/admin/content/resources'
+  defaults:
+    _entity_list: 'resource'
+    _title: 'Resources'
+  requirements:
+    _permission: 'administer resource entities'
+
+entity.resource.add_form:
+  path: '/resource/add'
+  defaults:
+    _entity_form: 'resource.add'
+    _title: 'Add Resource'
+  requirements:
+    _entity_create_access: 'resource'
+  options:
+    _admin_route: TRUE  
+
+entity.resource.edit_form:
+  path: '/resource/{resource}/edit'
+  defaults:
+    _entity_form: 'resource.edit'
+    _title: 'Edit Resource'
+  requirements:
+    _entity_access: 'resource.edit'
+  options:
+    _admin_route: TRUE
+
+entity.resource.delete_form:
+  path: '/resource/{resource}/delete'
+  defaults:
+    _entity_form: 'resource.delete'
+    _title: 'Delete Resource'
+  requirements:
+    _entity_access: 'resource.delete'
+
+entity.resource.canonical:
+  path: '/resource/{resource}'
+  defaults:
+    _entity_view: 'resource.full'
+    _title: 'Resource'
+  requirements:
+    _entity_access: 'resource.view'
+
+entity.resource.settings:
+  path: '/admin/structure/resources/settings'
+  defaults:
+    _form: '\Drupal\custom_entities\Form\ResourceSettingsForm'
+    _title: 'Resource settings'
+  requirements:
+    _permission: 'administer resource entities'
+
+# Project routes
+entity.project.collection:
+  path: '/admin/content/projects'
+  defaults:
+    _entity_list: 'project'
+    _title: 'Projects'
+  requirements:
+    _permission: 'administer project entities'
+
+entity.project.add_form:
+  path: '/project/add'
+  defaults:
+    _entity_form: 'project.add'
+    _title: 'Add Project'
+  requirements:
+    _entity_create_access: 'project'
+  options:
+    _admin_route: TRUE
+
+entity.project.edit_form:
+  path: '/project/{project}/edit'
+  defaults:
+    _entity_form: 'project.edit'
+    _title: 'Edit Project'
+  requirements:
+    _entity_access: 'project.edit'
+  options:
+    _admin_route: TRUE
+
+entity.project.delete_form:
+  path: '/project/{project}/delete'
+  defaults:
+    _entity_form: 'project.delete'
+    _title: 'Delete Project'
+  requirements:
+    _entity_access: 'project.delete'
+
+entity.project.canonical:
+  path: '/project/{project}'
+  defaults:
+    _entity_view: 'project.full'
+    _title: 'Project'
+  requirements:
+    _entity_access: 'project.view'
+
+entity.project.settings:
+  path: '/admin/structure/projects/settings'
+  defaults:
+    _form: '\Drupal\custom_entities\Form\ProjectSettingsForm'
+    _title: 'Project settings'
+  requirements:
+    _permission: 'administer project entities'
+
+# Demand routes
+entity.demand.collection:
+  path: '/admin/content/demands'
+  defaults:
+    _entity_list: 'demand'
+    _title: 'Demands'
+  requirements:
+    _permission: 'administer demand entities'
+
+entity.demand.add_form:
+  path: '/demand/add'
+  defaults:
+    _entity_form: 'demand.add'
+    _title: 'Add Demand'
+  requirements:
+    _entity_create_access: 'demand'
+  options:
+    _admin_route: TRUE
+
+entity.demand.edit_form:
+  path: '/demand/{demand}/edit'
+  defaults:
+    _entity_form: 'demand.edit'
+    _title: 'Edit Demand'
+  requirements:
+    _entity_access: 'demand.edit'
+  options:
+    _admin_route: TRUE
+
+entity.demand.delete_form:
+  path: '/demand/{demand}/delete'
+  defaults:
+    _entity_form: 'demand.delete'
+    _title: 'Delete Demand'
+  requirements:
+    _entity_access: 'demand.delete'
+
+entity.demand.canonical:
+  path: '/demand/{demand}'
+  defaults:
+    _entity_view: 'demand.full'
+    _title: 'Demand'
+  requirements:
+    _entity_access: 'demand.view'
+
+entity.demand.settings:
+  path: '/admin/structure/demands/settings'
+  defaults:
+    _form: '\Drupal\custom_entities\Form\DemandSettingsForm'
+    _title: 'Demand settings'
+  requirements:
+    _permission: 'administer demand entities'
+
+# Social routes
+entity.social.collection:
+  path: '/admin/content/socials'
+  defaults:
+    _entity_list: 'social'
+    _title: 'Socials'
+  requirements:
+    _permission: 'administer social entities'
+
+entity.social.add_form:
+  path: '/social/add'
+  defaults:
+    _entity_form: 'social.add'
+    _title: 'Add Social'
+  requirements:
+    _entity_create_access: 'social'
+  options:
+    _admin_route: TRUE
+
+entity.social.edit_form:
+  path: '/social/{social}/edit'
+  defaults:
+    _entity_form: 'social.edit'
+    _title: 'Edit Social'
+  requirements:
+    _entity_access: 'social.edit'
+  options:
+    _admin_route: TRUE
+
+entity.social.delete_form:
+  path: '/social/{social}/delete'
+  defaults:
+    _entity_form: 'social.delete'
+    _title: 'Delete Social'
+  requirements:
+    _entity_access: 'social.delete'
+
+entity.social.canonical:
+  path: '/social/{social}'
+  defaults:
+    _entity_view: 'social.full'
+    _title: 'Social'
+  requirements:
+    _entity_access: 'social.view'
+
+entity.social.settings:
+  path: '/admin/structure/social/settings'
+  defaults:
+    _form: '\Drupal\custom_entities\Form\SocialSettingsForm'
+    _title: 'Social settings'
+  requirements:
+    _permission: 'administer social entities'
+
+# Meeting routes
+entity.meeting.collection:
+  path: '/admin/content/meetings'
+  defaults:
+    _entity_list: 'meeting'
+    _title: 'Meetings'
+  requirements:
+    _permission: 'administer meeting entities'
+
+entity.meeting.add_form:
+  path: '/meeting/add'
+  defaults:
+    _entity_form: 'meeting.add'
+    _title: 'Add Meeting'
+  requirements:
+    _entity_create_access: 'meeting'
+  options:
+    _admin_route: TRUE
+
+entity.meeting.edit_form:
+  path: '/meeting/{meeting}/edit'
+  defaults:
+    _entity_form: 'meeting.edit'
+    _title: 'Edit Meeting'
+  requirements:
+    _entity_access: 'meeting.edit'
+  options:
+    _admin_route: TRUE
+
+entity.meeting.delete_form:
+  path: '/meeting/{meeting}/delete'
+  defaults:
+    _entity_form: 'meeting.delete'
+    _title: 'Delete Meeting'
+  requirements:
+    _entity_access: 'meeting.delete'
+
+entity.meeting.canonical:
+  path: '/meeting/{meeting}'
+  defaults:
+    _entity_view: 'meeting.full'
+    _title: 'Meeting'
+  requirements:
+    _entity_access: 'meeting.view'
+
+entity.meeting.settings:
+  path: '/admin/structure/meeting/settings'
+  defaults:
+    _form: '\Drupal\custom_entities\Form\MeetingSettingsForm'
+    _title: 'Meeting settings'
+  requirements:
+    _permission: 'administer meeting entities'
+entity.profile.settings:
+  path: 'admin/structure/profile'
+  defaults:
+    _form: '\Drupal\custom_entities\Form\ProfileSettingsForm'
+    _title: 'Profile'
+  requirements:
+    _permission: 'administer profile'
+
+entity.event.settings:
+  path: 'admin/structure/event'
+  defaults:
+    _form: '\Drupal\custom_entities\Form\EventSettingsForm'
+    _title: 'Event'
+  requirements:
+    _permission: 'administer event'
+
+entity.user_meta.settings:
+  path: 'admin/structure/user-meta'
+  defaults:
+    _form: '\Drupal\custom_entities\Form\UserMetaSettingsForm'
+    _title: 'User Meta'
+  requirements:
+    _permission: 'administer user_meta'

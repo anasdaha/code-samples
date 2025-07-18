@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: meeting
+label: Meeting
+description: 'A meeting entity for website.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: true

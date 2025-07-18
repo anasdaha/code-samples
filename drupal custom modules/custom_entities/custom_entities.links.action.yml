@@ -1,0 +1,46 @@
+entity.resource.add_form:
+  route_name: entity.resource.add_form
+  title: 'Add Resource'
+  appears_on:
+    - entity.resource.collection
+  
+entity.project.add_form:
+  route_name: entity.project.add_form
+  title: 'Add Project'
+  appears_on:
+    - entity.project.collection
+
+entity.demand.add_form:
+  route_name: entity.demand.add_form
+  title: 'Add Demand'
+  appears_on:
+    - entity.demand.collection
+
+entity.social.add_form:
+  route_name: entity.social.add_form
+  title: 'Add Social'
+  appears_on:
+    - entity.social.collection
+
+entity.meeting.add_form:
+  route_name: entity.meeting.add_form
+  title: 'Add Meeting'
+  appears_on:
+    - entity.meeting.collection
+profile.add_form:
+  title: 'Add profile'
+  route_name: entity.profile.add_form
+  appears_on:
+    - entity.profile.collection
+
+event.add_form:
+  title: 'Add event'
+  route_name: entity.event.add_form
+  appears_on:
+    - entity.event.collection
+
+user_meta.add_form:
+  title: 'Add user meta'
+  route_name: entity.user_meta.add_form
+  appears_on:
+    - entity.user_meta.collection

@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - custom_entities
+id: user_meta_delete_action
+label: 'Delete user metas'
+type: user_meta
+plugin: entity:delete_action:user_meta
+configuration: {  }

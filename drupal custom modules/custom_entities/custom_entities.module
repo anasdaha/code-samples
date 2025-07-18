@@ -1,0 +1,161 @@
+<?php
+
+/**
+ * @file
+ * Main module file for Custom Entities module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function custom_entities_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.custom_entities':
+      $output = '';
+      $output .= '<h3>' . t('Custom Entities') . '</h3>';
+      $output .= '<p>' . t('Provides custom Resource entities for website.') . '</p>';
+      return $output;
+  }
+}
+
+function custom_entities_theme($existing, $type, $theme, $path) {
+  return [
+    'project' => [
+      'render element' => 'elements',
+    ],
+    'project__teaser' => [
+      'base hook' => 'project',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function custom_entities_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  return;
+  // Target project add/edit forms
+    if (isset($form['field_country'])) {
+      $country_manager = \Drupal::service('country_manager');
+      $options = $country_manager->getList();
+
+      // Remove empty option if desired
+      unset($options['']);
+
+      // Set options on the widget
+      if (isset($form['field_country']['widget'][0]['value'])) {
+        $form['field_country']['widget'][0]['value']['#options'] = $options;
+      }
+      elseif (isset($form['field_country']['widget']['#options'])) {
+        $form['field_country']['widget']['#options'] = $options;
+      }
+      elseif (isset($form['field_country']['widget'][0]['#options'])) {
+        $form['field_country']['widget'][0]['#options'] = $options;
+      }
+    }
+
+}
+
+function custom_entities_theme_suggestions_project(array $variables) {
+  $suggestions = [];
+  $project = $variables['elements']['#project'];
+  $view_mode = $variables['elements']['#view_mode'];
+
+  // Add view mode suggestion
+  $suggestions[] = 'project__' . $view_mode;
+
+  // Add bundle-specific suggestions if your entity has bundles
+  if (isset($project->bundle)) {
+    $suggestions[] = 'project__' . $project->bundle();
+    $suggestions[] = 'project__' . $project->bundle() . '__' . $view_mode;
+  }
+
+  return $suggestions;
+}
+
+function custom_entities_preprocess_project(&$variables) {
+  // Build content array from elements
+  $variables['content'] = [];
+
+  // Extract all child elements (these are the rendered fields)
+  foreach (\Drupal\Core\Render\Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+
+  // Make the project entity easily accessible
+  $project = $variables['elements']['#project'];
+  $variables['project'] = $project;
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+
+  // Add a label variable for convenience
+  $variables['label'] = $project->label();
+
+  $field = $project->get('field_field')->entity;
+  if ($field instanceof \Drupal\taxonomy\TermInterface) {
+    $variables['project_field'] = $field;
+    $fieldIconMedia = $field->get('field_icon')->entity;
+    if ($fieldIconMedia instanceof \Drupal\media\MediaInterface) {
+      // Get the file from the media entity
+      if ($fieldIconMedia->hasField('field_media_svg') && !$fieldIconMedia->get('field_media_svg')->isEmpty()) {
+        $file = $fieldIconMedia->get('field_media_svg')->entity;
+        if ($file) {
+          $variables['project_field_icon_url'] = \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
+          $variables['project_field_icon_alt'] = $fieldIconMedia->get('field_media_svg')->alt ?: $field->getName();
+        }
+      }
+    }
+
+    $color = $field->get('field_color')->getValue();
+    $variables['project_field_color'] = $color[0]['color'] ?? '';
+    $bgColor = $field->get('field_bg_color')->getValue();
+    $variables['project_field_bg_color'] = $bgColor[0]['color'] ?? '';
+  }
+
+  $description = $project->get('field_description')->value;
+  if ($description && strlen($description) > 120) {
+    $description = substr($description, 0, 120) . '...';
+    $variables['description'] = $description;
+  }
+  else {
+    $variables['description'] = $description;
+  }
+
+
+  $modality   = $project->get('field_modality')->value;
+
+  if ($modality === 'online') {
+    $location_string = t("En ligne")->render();
+  }
+  else {
+    $locality   = $project->get('field_locality')->value;
+    $countryISO = $project->get('field_country')->value;
+
+    $countryName = '';
+    if ($countryISO == 'FR-NC') {
+      $countryName = t('Nouvelle-Calédonie')->render();
+    }
+    elseif ($countryISO) {
+      // Translate ISO → French name (fallback to ISO if unknown)
+      $countryName = isset($countries_in_french[$countryISO])
+        ? $countries_in_french[$countryISO]
+        : $countryISO;
+    }
+
+    // Build an array of the parts that actually exist
+    $parts = [];
+    if (!empty($locality)) {
+      $parts[] = $locality;
+    }
+    if (!empty($countryISO)) {
+      $parts[] = $countryName;
+    }
+
+    // Join with comma (or end up empty if neither)
+    $location_string = implode(', ', $parts);
+  }
+
+  $variables['location'] = $location_string;
+}

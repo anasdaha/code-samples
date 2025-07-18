@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - custom_entities
+id: profile_save_action
+label: 'Save profiles'
+type: profile
+plugin: entity:save_action:profile
+configuration: {  }

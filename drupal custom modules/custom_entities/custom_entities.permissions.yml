@@ -1,0 +1,180 @@
+administer resource entities:
+  title: 'Administer Resource entities'
+  description: 'Access the Resource administration pages.'
+  restrict access: true
+
+view published resource entities:
+  title: 'View published Resource entities'
+  description: 'View published Resource entities.'
+
+view unpublished resource entities:
+  title: 'View unpublished Resource entities'
+  description: 'View unpublished Resource entities.'
+
+create resource entities:
+  title: 'Create new Resource entities'
+  description: 'Create new Resource entities.'
+
+edit any resource entities:
+  title: 'Edit any Resource entities'
+  description: 'Edit any Resource entities.'
+
+edit own resource entities:
+  title: 'Edit own Resource entities'
+  description: 'Edit own Resource entities.'
+
+delete any resource entities:
+  title: 'Delete any Resource entities'
+  description: 'Delete any Resource entities.'
+
+delete own resource entities:
+  title: 'Delete own Resource entities'
+  description: 'Delete own Resource entities.'
+
+# Project permissions
+administer project entities:
+  title: 'Administer Project entities'
+  description: 'Access the Project administration pages.'
+  restrict access: true
+
+view published project entities:
+  title: 'View published Project entities'
+  description: 'View published Project entities.'
+
+view unpublished project entities:
+  title: 'View unpublished Project entities'
+  description: 'View unpublished Project entities.'
+
+create project entities:
+  title: 'Create new Project entities'
+  description: 'Create new Project entities.'
+
+edit any project entities:
+  title: 'Edit any Project entities'
+  description: 'Edit any Project entities.'
+
+edit own project entities:
+  title: 'Edit own Project entities'
+  description: 'Edit own Project entities.'
+
+delete any project entities:
+  title: 'Delete any Project entities'
+  description: 'Delete any Project entities.'
+
+delete own project entities:
+  title: 'Delete own Project entities'
+  description: 'Delete own Project entities.'
+
+# Demand permissions
+administer demand entities:
+  title: 'Administer Demand entities'
+  description: 'Access the Demand administration pages.'
+  restrict access: true
+
+view published demand entities:
+  title: 'View published Demand entities'
+  description: 'View published Demand entities.'
+
+view unpublished demand entities:
+  title: 'View unpublished Demand entities'
+  description: 'View unpublished Demand entities.'
+
+create demand entities:
+  title: 'Create new Demand entities'
+  description: 'Create new Demand entities.'
+
+edit any demand entities:
+  title: 'Edit any Demand entities'
+  description: 'Edit any Demand entities.'
+
+edit own demand entities:
+  title: 'Edit own Demand entities'
+  description: 'Edit own Demand entities.'
+
+delete any demand entities:
+  title: 'Delete any Demand entities'
+  description: 'Delete any Demand entities.'
+
+delete own demand entities:
+  title: 'Delete own Demand entities'
+  description: 'Delete own Demand entities.'
+
+# Social permissions
+administer social entities:
+  title: 'Administer Social entities'
+  description: 'Access the Social administration pages.'
+  restrict access: true
+
+view published social entities:
+  title: 'View published Social entities'
+  description: 'View published Social entities.'
+
+view unpublished social entities:
+  title: 'View unpublished Social entities'
+  description: 'View unpublished Social entities.'
+
+create social entities:
+  title: 'Create new Social entities'
+  description: 'Create new Social entities.'
+
+edit any social entities:
+  title: 'Edit any Social entities'
+  description: 'Edit any Social entities.'
+
+edit own social entities:
+  title: 'Edit own Social entities'
+  description: 'Edit own Social entities.'
+
+delete any social entities:
+  title: 'Delete any Social entities'
+  description: 'Delete any Social entities.'
+
+delete own social entities:
+  title: 'Delete own Social entities'
+  description: 'Delete own Social entities.'
+
+# Meeting permissions
+administer meeting entities:
+  title: 'Administer Meeting entities'
+  description: 'Access the Meeting administration pages.'
+  restrict access: true
+
+view published meeting entities:
+  title: 'View published Meeting entities'
+  description: 'View published Meeting entities.'
+
+view unpublished meeting entities:
+  title: 'View unpublished Meeting entities'
+  description: 'View unpublished Meeting entities.'
+
+create meeting entities:
+  title: 'Create new Meeting entities'
+  description: 'Create new Meeting entities.'
+
+edit any meeting entities:
+  title: 'Edit any Meeting entities'
+  description: 'Edit any Meeting entities.'
+
+edit own meeting entities:
+  title: 'Edit own Meeting entities'
+  description: 'Edit own Meeting entities.'
+
+delete any meeting entities:
+  title: 'Delete any Meeting entities'
+  description: 'Delete any Meeting entities.'
+
+delete own meeting entities:
+  title: 'Delete own Meeting entities'
+  description: 'Delete own Meeting entities.'
+
+administer profile:
+  title: 'Administer profiles'
+  restrict access: true
+
+administer event:
+  title: 'Administer events'
+  restrict access: true
+
+administer user_meta:
+  title: 'Administer user metas'
+  restrict access: true

@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - custom_entities
+id: user_meta_save_action
+label: 'Save user metas'
+type: user_meta
+plugin: entity:save_action:user_meta
+configuration: {  }
