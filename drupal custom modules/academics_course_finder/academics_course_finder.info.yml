@@ -1,0 +1,5 @@
+name: Academics Course Finder
+type: module
+description: 'Provides Program Finder Which is List of all Academics Course and Programs'
+package: Custom
+core_version_requirement: ^9 || ^10

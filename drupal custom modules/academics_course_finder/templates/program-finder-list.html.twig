@@ -1,0 +1,91 @@
+  <div class="bg-gray">
+      <div class="Breadcrumbs">
+        {{ drupal_block('system_breadcrumb_block') }}
+      </div>
+      <div data-finder>
+          <div class="Main Main--flip Main--sticky">
+              <div class="Main__sidebar Main__sidebar--top flush">
+                  <form class="Finder__form flush" data-finder-form>
+                      <label class="Finder__label Finder__label--search">
+                          Search
+                          <input class="Finder__input" type="search" placeholder="Search for a program" name="search" data-finder-filter>
+                      </label>
+                      <div class="Finder__label">
+                          Filter by
+                          <fieldset>
+                              <legend class="invis">Filter by Program Type</legend>
+                              <div class="Finder__dropdown">
+                                  <button class="Finder__button" type="button" data-expand aria-expanded="false">Program Type</button>
+                                  <div class="Finder__list">
+                                    {% for tid, type in types %}
+                                      <label class="Finder__sublabel">
+                                      <input class="Finder__checkbox" type="checkbox" name="type" value="{{ type|raw }}" data-finder-filter>{{ type|raw }}</label>
+                                    {% endfor %}
+                                  </div>
+                              </div>
+                          </fieldset>
+                          <fieldset>
+                              <legend class="invis">Filter by College</legend>
+                              <div class="Finder__dropdown">
+                                  <button class="Finder__button" type="button" data-expand aria-expanded="false">College</button>
+                                  <div class="Finder__list">
+                                    {% for tid, college in colleges %}
+                                    <label class="Finder__sublabel">
+                                      <input class="Finder__checkbox" type="checkbox" name="college" value="{{ college|raw }}" data-finder-filter>{{ college|raw }}</label>
+                                    {% endfor %}
+                                  </div>
+                              </div>
+                          </fieldset>
+                          <fieldset>
+                              <legend class="invis">Filter by Department</legend>
+                              <div class="Finder__dropdown">
+                                  <button class="Finder__button" type="button" data-expand aria-expanded="false">Department</button>
+                                  <div class="Finder__list">
+                                    {% for tid, department in academic_department %}
+                                      <label class="Finder__sublabel">
+                                      <input class="Finder__checkbox" type="checkbox" name="department" value="{{ department|raw }}" data-finder-filter>{{ department|raw }}</label>
+                                    {% endfor %}
+                                  </div>
+                              </div>
+                          </fieldset>
+                          <fieldset>
+                              <legend class="invis">Filter by Subject Area</legend>
+                              <div class="Finder__dropdown">
+                                  <button class="Finder__button" type="button" data-expand aria-expanded="false">Subject Area</button>
+                                  <div class="Finder__list">
+                                    {% for tid, subject in subject_area %}
+                                      <label class="Finder__sublabel">
+                                      <input class="Finder__checkbox" type="checkbox" name="subject" value="{{ subject|raw }}" data-finder-filter>{{ subject|raw }}</label>
+                                    {% endfor %}
+                                  </div>
+                              </div>
+                          </fieldset>
+                          <fieldset>
+                              <legend class="invis">Filter by Location</legend>
+                              <div class="Finder__dropdown">
+                                  <button class="Finder__button" type="button" data-expand aria-expanded="false">Location</button>
+                                  <div class="Finder__list">
+                                    {% for tid, location in locations %}
+                                      <label class="Finder__sublabel">
+                                      <input class="Finder__checkbox" type="checkbox" name="location" value="{{ location }}" data-finder-filter>{{ location }}</label>
+                                    {% endfor %}    
+                                  </div>
+                              </div>
+                          </fieldset>
+                      </div>
+                      <div class="Finder__active" data-finder-active></div>
+                      <button class="Finder__reset" type="reset">Clear Filters</button>
+                  </form>
+              </div>
+              <div class="Main__content flush">
+                  <h1>Find Your Program</h1>
+                  {{ drupal_entity('block', 'program_finder_intro') }}
+                  <hr>
+                  <p class="Finder__counter" data-finder-counter></p>
+                  <div data-finder-list="/api/programs.json" data-finder-per="10"></div>
+                  <div class="Finder__pagination" data-finder-pagination></div>
+                  <div id="finder-modal" class="Finder__modal"></div>
+              </div>
+          </div>
+      </div>
+  </div>

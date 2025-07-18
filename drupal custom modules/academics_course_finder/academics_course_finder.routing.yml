@@ -1,0 +1,15 @@
+academics_course_finder_program.academics:
+  path: '/academics/programs'
+  defaults:
+    _title: 'Find Your Program'
+    _controller: '\Drupal\academics_course_finder\Controller\ProgramFinderController::build'
+  requirements:
+    _permission: 'access content'
+
+academics_course_finder_program.api.programs:
+  path: '/api/programs.json'
+  defaults:
+    _title: 'Programs'
+    _controller: '\Drupal\academics_course_finder\Controller\ApiController::programs'
+  requirements:
+    _permission: 'access content'

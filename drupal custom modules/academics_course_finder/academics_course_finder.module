@@ -1,0 +1,173 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Academics Course Finder Program module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\taxonomy\TermStorageInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\pathauto\PathautoPatternInterface;
+
+/**
+ * Implements hook_page_attachments().
+ *
+ */
+function academics_course_finder_page_attachments(array &$page) {
+  $page['#attached']['html_head'][] = [
+    [
+      '#tag' => 'script',
+      '#attributes' => [
+        'type' => 'module',
+        'src' => '/modules/custom/academics_course_finder/assets/js/script.js?v=1.alpha',
+      ],
+    ],
+    'academics_course_finder',
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page_attachments.
+ */
+function academics_course_finder_page_attachments_alter(&$page) {
+  $page['#attached']['library'][] = 'academics_course_finder/academics_course_finder';
+}
+
+/**
+ * Implements hook_theme().
+ */
+function academics_course_finder_theme($existing, $type, $theme, $path) {
+  return [
+    'program_finder_list' => [
+      'variables' => [
+        'types' => NULL,
+        'locations' => NULL,
+        'academic_department' => NULL,
+        'colleges' => NULL,
+        'subject_area' => NULL
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_node_access().
+ */
+function academics_course_finder_node_access(\Drupal\node\NodeInterface $node, $op, \Drupal\Core\Session\AccountInterface $account) {
+
+  $access = '';
+  $term_ids = [];
+
+  if($node->field_access) {
+    $access = $node->field_access->target_id;
+  }
+
+  $user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $field_access_items = $user->get('field_access')->getValue();
+  foreach ($field_access_items as $item) {
+    if (isset($item['target_id'])) {
+      array_push($term_ids, $item['target_id']);
+      academics_course_finder_load_child_term_ids($term_storage, $item['target_id'], $term_ids);
+    }
+  }
+
+  if ($op === 'update') {
+		if (in_array($access, $term_ids)) {
+			return AccessResult::neutral();
+		} else {
+      return AccessResult::forbidden();
+    }
+	}
+
+  if (in_array($node->bundle(), ['contact_card']) && $op == 'view') {
+		if (!\Drupal::currentUser()->isAuthenticated()) {
+			return AccessResult::forbidden();
+		}
+	}
+
+  // No opinion/default.
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function academics_course_finder_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Apply the logic to all forms starting with 'node_' and ending with '_form'.
+  if (preg_match('/^node_.*_form$/', $form_id)) {
+    // Check if the field 'field_access' exists in the form.
+    if (isset($form['field_access'])) {
+
+      $current_user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+      // Get the user's field_access values (user's access files).
+      $user_field_access = $current_user->get('field_access')->getValue();
+
+      $roles = $current_user->getRoles();
+      
+      // Get the term storage service.
+
+      $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+
+      // Gather the term IDs from the user's field_access and include all child terms.
+      $user_access_ids = [];
+      foreach ($user_field_access as $item) {
+        if (isset($item['target_id'])) {
+          array_push($user_access_ids, $item['target_id']);
+          // Use the function to load child term IDs recursively.
+          academics_course_finder_load_child_term_ids($term_storage, $item['target_id'], $user_access_ids);
+        }
+      }
+
+      // Option 1: Try accessing the field using getValue().
+      $field_access_value = $form_state->getValue(['field_access']);
+
+      // Option 2: Try getting the raw user input if getValue() doesn't work.
+      $input = $form_state->getUserInput();
+      if (!in_array('marketing', $roles) && !in_array('administrator', $roles)) {
+        // Ensure 'field_access' is set and has a value.
+        if (isset($input['field_access']) && !empty($input['field_access'])) {
+          $field_access_value = $input['field_access'];
+          $term = $term_storage->load($field_access_value);
+          if ($term) {
+            $term_label = $term->label();
+          } else {
+            $term_label = 'None';
+          }
+          // \Drupal::messenger()->addError(t('Access field value from input: @value', ['@value' => print_r($field_access_value, TRUE)]));
+          if (!in_array($field_access_value, $user_access_ids)) {
+            \Drupal::messenger()->addError(t("You do not have the proper microsite access for @term.", ['@term' => $term_label]));
+            $form_state->setErrorByName('field_access', t("You do not have the proper microsite access for @term.", ['@term' => $term_label]));
+          }
+        }
+      }
+    }
+  }
+}
+
+
+/**
+ * Implements function to get nested terms.
+ */
+function academics_course_finder_load_child_term_ids(TermStorageInterface $term_storage, $parent_tid, array &$term_ids) {
+  // Load child terms for the given parent term ID.
+  $child_terms = $term_storage->loadChildren($parent_tid);
+
+  if ($child_terms) {
+    foreach ($child_terms as $child_term) {
+      // Add the child term ID to the array.
+      array_push($term_ids, $child_term->id());
+      // Recursively load nested child term IDs.
+      academics_course_finder_load_child_term_ids($term_storage, $child_term->id(), $term_ids);
+    }
+  }
+}
+
+function academics_course_finder_pathauto_pattern_alter(PathautoPatternInterface $pattern, array $context) {
+  if ($context['module'] == 'node' && in_array($context['op'], ['insert', 'update', 'bulkupdate'], TRUE) && $context['bundle'] === "program") {
+      $pattern->setPattern('/academics/programs/[node:title]');
+  }
+}

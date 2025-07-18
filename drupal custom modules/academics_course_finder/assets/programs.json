@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Lorem ipsum dolor sit amet",
+    "keywords": [
+      "Accountancy",
+      "Money"
+    ],
+    "type": ["Other"],
+    "college": ["College Name and Sciences"],
+    "department": ["Mathematics"],
+    "subject": [
+      "Lorem ipsum",
+      "Lorem ipsum dolor sit amet"
+    ],
+    "location": ["Main Campus"],
+    "area": ["Lorem ipsum dolor sit amet"],
+    "details": [
+      {
+        "section": "Undergraduate",
+        "items": [
+          {
+            "name": "Lorem ipsum dolor sit amet",
+            "location": "Location",
+            "modality": "Modality",
+            "description": "Description — Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.",
+            "link": "#"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "BS Computer",
+    "keywords": [
+      "Accountancy",
+      "Money"
+    ],
+    "type": ["Minor", "Certificate"],
+    "college": ["Lorem ipsum dolor sit amet"],
+    "department": ["BS Computer"],
+    "subject": [
+      "Lorem ipsum dolor",
+      "Lorem ipsum dolor sit amet"
+    ],
+    "location": ["Main Campus"],
+    "area": ["BS Computer"],
+    "details":[
+      {
+        "section": "Undergraduate",
+        "items": [
+          {
+            "name": "Studies, Minor",
+            "location": "Location",
+            "modality": "Modality",
+            "description": "Description — Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.",
+            "link": "#"
+          }
+        ]
+      },
+      {
+        "section": "Graduate",
+        "items": [
+          {
+            "name": "Lorem ipsum dolor sit amets, Lorem ipsum dolor sit amet",
+            "location": "Location",
+            "modality": "Modality",
+            "description": "Description — Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.",
+            "link": "#"
+          }
+        ]
+      }
+    ]
+  }
+]

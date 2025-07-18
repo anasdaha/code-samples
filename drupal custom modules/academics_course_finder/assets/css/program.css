@@ -1,0 +1,58 @@
+.paragraph-type--stats-card [id*="-field-stats-cards"]{
+    display: block;
+    clear: both;
+}
+.paragraph-type--stats-card .col-3.layout-column{
+    max-width: 300px;
+}
+.paragraph-type--stats-card .col-3.layout-column:nth-of-type(1),
+.paragraph-type--stats-card .col-3.layout-column:nth-of-type(3){
+    padding: 0;
+}
+.paragraph-type--stats-card .stats-label > .fieldset__legend .fieldset__label,
+.field--name-field-single-column-full-list .form-item__description{
+    font-style: italic;
+    color: #BD7AFF;
+}
+.field--name-field-single-column-full-list .form-item__description{
+    margin-top: 15px;
+    min-width: 710px;
+    max-width: 710px;
+}
+.helper-text .field--name-field-rss-type .form-item__description{
+    order: -1;
+    font-style: italic;
+    color: #BD7AFF;
+    margin-bottom: 20px;
+}
+.helper-text .field--name-field-rss-type .form-item{
+    display: flex;
+    flex-direction: column;
+    max-width: calc(var(--gin-max-line-length) - 130px);
+}
+.ck-iframe-embed-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: min-content;
+    row-gap: 10px;
+}
+.ck-iframe-embed-form > *{
+    flex: 1 0 100%;
+}
+.ck-iframe-embed-form .ck-button.ck-button-save, .ck-iframe-embed-form  .ck-button.ck-button-cancel{
+    flex: 1 0 48%;
+    max-width: 45%;
+}
+label[for=edit-field-social-links-0-platform-values-contact-value]{
+    font-size: 0;
+}
+label[for=edit-field-social-links-0-platform-values-contact-value]:before{
+    content: "More";
+    font-size: var(--gin-font-size-s);
+}
+
+.field--type-social-media-links-field .claro-details__wrapper.details-wrapper{
+    display: flex;
+    flex-direction: column;
+}
