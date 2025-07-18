@@ -10,6 +10,9 @@ This repository contains a collection of **custom Drupal modules** and **drupal 
 ├── drupal-custom-modules/
 │   ├── admin_style_tweaks/
 │   ├── main_navigation_seed/
+│   ├── custom_entities/
+│   ├── admin_dashboard_tweaks/
+│   ├── academics_course_finder/
 │   └── program_finder/
 └── drupal-custom-themes/
     └── bloomix_base/
@@ -51,7 +54,64 @@ Automatically seeds the main navigation menu and essential system blocks during 
 
 ---
 
-### 3. `program_finder`
+### 3. `custom_entities`
+
+**Purpose:**  
+Provides custom content entities for structured data management on the site.
+
+**Features:**
+- Defines the following custom entities:
+  - `Demand`
+  - `Project`
+  - `Meeting`
+  - `Resource`
+  - `Social`
+  - `Profile`
+- Includes schema, CRUD operations, form handling, and admin UI integration for each entity.
+- Extendable for workflows, relationships, and field-level permissions.
+
+**Use Cases:**
+- Useful for complex platforms like collaborative networks, portfolios, or service directories.
+- Centralized structure for managing distinct content types beyond standard nodes.
+
+---
+
+### 4. `admin_dashboard_tweaks`
+
+**Purpose:**  
+Adds enhancements and automation to the Drupal admin dashboard.
+
+**Features:**
+- UI tweaks for better usability on the admin theme.
+- Provides cron-based automation for:
+  - Importing Media files.
+  - Importing Faculty content (nodes).
+- Custom styles for a cleaner admin interface experience.
+
+**Use Cases:**
+- Useful for content-heavy sites where regular data imports are needed.
+- Streamlines admin tasks for site editors and managers.
+
+---
+
+### 5. `academics_course_finder`
+
+**Purpose:**  
+Provides a Program Finder that lists all academic courses and programs.
+
+**Features:**
+- Displays a structured, filterable list of programs or courses.
+- Supports integration with `Program` or `Course` content types.
+- Theming-ready with custom templates and layouts.
+- Configurable route and URL path from the admin UI.
+
+**Use Cases:**
+- Ideal for universities, colleges, or learning platforms needing searchable academic directories.
+- Can be extended with filters, views integration, or taxonomy-based browsing.
+
+---
+
+### 6. `program_finder`
 
 **Purpose:**  
 Displays a customizable listing of nodes from the **Programs** content type on Dynamic Route.
