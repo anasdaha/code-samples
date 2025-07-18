@@ -1,0 +1,103 @@
+:root {
+  /* fonts */
+  --serif: "Roboto Slab", serif;
+  --sans: "Roboto Condensed", sans-serif;
+
+  /* type */
+  --h1: 700 condensed clamp(2.875rem, 8vw, 4rem)/1 var(--sans);
+  --h2: 400 clamp(2.25rem, 6vw, 3rem)/1.1 var(--serif);
+  --h3: 400 clamp(2rem, 5vw, 2.25rem)/1.2 var(--serif);
+  --h4: 400 clamp(1.75rem, 4vw, 2rem)/1.3 var(--serif);
+  --h5: 700 1.5rem/1.4 var(--serif);
+  --h6: 700 1.25rem/1.4 var(--serif);
+  --body: 400 1.125rem/1.5 var(--sans);
+  --small: 400 1rem/1.6 var(--sans);
+  --meta: 400 0.875rem/1.7 var(--sans);
+
+  /* colors */
+  --white: #fff;
+  --white-20: #ffffff33;
+  --black: #000;
+  --black-10: #0000001a;
+  --black-20: #00000033;
+  --black-80: #000000cc;
+  --blue: #003da7;
+  --blue-dk: #002c78;
+  --blue-05: #003da70d;
+  --gold: #fdb813;
+  --gold-lt: #fad377;
+  --gray: #edf2f2;
+
+  /* layout */
+  --gutter: 2rem;
+  --space: 6rem;
+  --space-sm: calc(var(--space) / 2);
+  --container: max(var(--gutter), (100% - 72rem) / 2);
+  --container-xs: max(var(--gutter), (100% - 48rem) / 2);
+  --container-sm: max(var(--gutter), (100% - 63rem) / 2);
+  --container-lg: max(var(--gutter), (100% - 81rem) / 2);
+
+  /* animation */
+  --transition: 400ms ease;
+  --transition-sm: 200ms ease;
+
+  /* misc */
+  --shadow: 0 0.25rem 0.5rem var(--black-20);
+}
+
+:root {
+  --heading: var(--blue);
+  --link: var(--blue);
+  --button: var(--blue);
+  --button-text: var(--gold);
+  --button-hover: var(--blue-dk);
+  --text: var(--black);
+}
+
+.theme-blue {
+  --heading: var(--white);
+  --link: var(--gold);
+  --button: var(--gold);
+  --button-text: var(--black);
+  --button-hover: var(--gold-lt);
+  --background: var(--blue);
+  --text: var(--white);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in-left {
+  from {
+    transform: translateX(50%);
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in-right {
+  from {
+    transform: translateX(-50%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes slide-in-top {
+  from {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes slide-out-right {
+  to {
+    transform: translateX(100%);
+  }
+}

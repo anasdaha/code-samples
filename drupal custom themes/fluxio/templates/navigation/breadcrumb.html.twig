@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Theme override for a breadcrumb trail.
+ *
+ * Available variables:
+ * - breadcrumb: Breadcrumb trail items.
+ */
+#}
+{% if breadcrumb %}
+  {% set current_path = path('<current>') %}
+  {% set item_path = item.url|trim('/') %}
+  <div class="Breadcrumbs">
+    {% for item in breadcrumb %}
+      {% if item.url %}
+        {% if item.url != current_path %}
+          <a href="{{ item.url }}">{{ item.text }}</a>{{ ' — '|t}}
+        {% endif %}
+      {% else %}
+        {{ item.text }}
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

@@ -1,0 +1,325 @@
+<?php
+
+use Drupal\file\Entity\File;
+use Drupal\image\Entity\ImageStyle;
+
+/**
+ * @file
+ * Functions to support theming.
+ */
+
+/**
+ * Paragraphs preprocess.
+ */
+function fluxio_preprocess_paragraph(&$variables) {
+  // Set our own paragraphs type preprocess, drupal creates them by default, but they seem
+  // to only run hook_preprocess_paragraph__simple_content on default view mode,
+  // not additional view modes as well.
+  
+  // Load the view
+  $view = \Drupal\views\Views::getView('news_slider');
+
+  // Execute the display and get the results
+  if ($view) {
+    $view->setDisplay('block_1');
+    $view->execute();
+    $view_result_count = count($view->result);
+    
+    // Pass the result count to the template
+    $variables['news_slider_item_count'] = $view_result_count;
+  }
+}
+
+function fluxio_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+    $suggestions[] = 'page__' . $node->bundle();
+  }
+}
+
+function fluxio_preprocess_page(array &$variables) {
+  // Check if the current page is a node page and the node is available.
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.node.canonical' && isset($variables['node'])) {
+    $node = $variables['node'];
+
+    // Pass the node object to the page template.
+    $variables['node'] = $node;
+
+    // Pass the node label (title) to the template.
+    $variables['node_label'] = $node->label();
+
+    // If you need specific fields, pass them as separate variables.
+    if ($node->hasField('field_header')) {
+      $variables['field_header'] = $node->get('field_header')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_right_sidebar')) {
+      $variables['field_right_sidebar'] = $node->get('field_right_sidebar')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_footer')) {
+      $variables['field_footer'] = $node->get('field_footer')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_content')) {
+      $variables['field_content'] = $node->get('field_content')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_personal_website')) {
+      $variables['field_personal_website'] = $node->get('field_personal_website')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_social_media')) {
+      $variables['field_social_media'] = $node->get('field_social_media')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_designation')) {
+      $variables['field_designation'] = $node->get('field_designation')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_w_department')) {
+      $variables['field_w_department'] = $node->get('field_w_department')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_office')) {
+      $variables['field_office'] = $node->get('field_office')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_phone')) {
+      $variables['field_phone'] = $node->get('field_phone')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_email')) {
+      $variables['field_email'] = $node->get('field_email')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_fax')) {
+      $variables['field_fax'] = $node->get('field_fax')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_country')) {
+      $variables['field_country'] = $node->get('field_country')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_name_suffix')) {
+      $variables['field_name_suffix'] = $node->get('field_name_suffix')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_office_hours')) {
+      $variables['field_office_hours'] = $node->get('field_office_hours')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_curriculum_vitae')) {
+      $variables['field_curriculum_vitae'] = $node->get('field_curriculum_vitae')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+
+    if ($node->hasField('field_department') && !$node->get('field_department')->isEmpty()) {
+      $departments = [];
+      foreach ($node->get('field_department') as $item) {
+        $term = $item->entity;
+        if ($term) {
+          $departments[] = $term->label();
+        }
+      }
+      $variables['field_department'] = implode(', ', $departments);
+    }
+
+    if ($node->hasField('field_m_image')) {
+      // Extract the image URL from the media field.
+      $media_field = $node->get('field_m_image')->entity;
+      if ($media_field && $media_field->hasField('field_media_image')) {
+        $file = $media_field->get('field_media_image')->entity;
+        if ($file instanceof File) {
+          $image_uri = $file->getFileUri();
+          // $image_url = file_create_url($image_uri);
+          // Optionally, you can apply an image style.
+          $image_url = ImageStyle::load('wide')->buildUrl($image_uri);
+          $variables['field_m_image_url'] = $image_url;
+        }
+      }
+    }
+    if ($node->hasField('field_expertise')) {
+      $variables['field_expertise'] = $node->get('field_expertise')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_research_interests')) {
+      $variables['field_research_interests'] = $node->get('field_research_interests')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_education')) {
+      $variables['field_education'] = $node->get('field_education')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_selected_publications')) {
+      $variables['field_selected_publications'] = $node->get('field_selected_publications')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_selected_exhibitions')) {
+      $variables['field_selected_exhibitions'] = $node->get('field_selected_exhibitions')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_biography')) {
+      $variables['field_biography'] = $node->get('field_biography')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_background')) {
+      $variables['field_background'] = $node->get('field_background')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_selected_performances')) {
+      $variables['field_selected_performances'] = $node->get('field_selected_performances')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_additional_information')) {
+      $variables['field_additional_information'] = $node->get('field_additional_information')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_external_publications_link')) {
+      $variables['field_external_publications_link'] = $node->get('field_external_publications_link')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_professional_affiliations')) {
+      $variables['field_professional_affiliations'] = $node->get('field_professional_affiliations')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_honors')) {
+      $variables['field_honors'] = $node->get('field_honors')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+    if ($node->hasField('field_links')) {
+      $variables['field_links'] = $node->get('field_links')->view([
+        'label' => 'hidden',
+        'wrapper_element' => '',
+      ]);
+    }
+  }
+
+}
+
+/**
+ * Implements hook_preprocess_menu().
+ */
+function fluxio_preprocess_menu(&$variables) {
+  if ($variables['menu_name'] == 'mega-menu') {
+    // Debug menu tree data
+    \Drupal::logger('fluxio_theme')->debug('Menu variables: <pre>@data</pre>', [
+      '@data' => print_r($variables['items'], TRUE)
+    ]);
+    
+    $menu_tree = \Drupal::menuTree();
+    $parameters = new \Drupal\Core\Menu\MenuTreeParameters();
+    $parameters->setMaxDepth(4);
+    $parameters->onlyExpandedLinks();
+    $parameters->excludeRoot();
+    
+    $tree = $menu_tree->load('mega-menu', $parameters);
+    
+    // Debug loaded tree
+    \Drupal::logger('fluxio_theme')->debug('Loaded tree: <pre>@data</pre>', [
+      '@data' => print_r($tree, TRUE)
+    ]);
+    
+    $manipulators = [
+      ['callable' => 'menu.default_tree_manipulators:checkAccess'],
+      ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
+    ];
+    
+    $tree = $menu_tree->transform($tree, $manipulators);
+    $variables['items'] = $menu_tree->build($tree);
+  }
+}
+
+
+/**
+ * Implements hook_theme_suggestions_menu_alter().
+ */
+function fluxio_theme_suggestions_menu_alter(array &$suggestions, array $variables) {
+  if (isset($variables['menu_name']) && $variables['menu_name'] == 'mega-menu') {
+    $suggestions[] = 'menu__mega_menu';
+  }
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function fluxio_preprocess_block(&$variables) {
+  if (isset($variables['elements']['#id']) && $variables['elements']['#id'] == 'fluxio_megamenu') {
+    $menu_name = 'mega-menu';
+    $menu_tree = \Drupal::menuTree();
+    $parameters = new \Drupal\Core\Menu\MenuTreeParameters();
+    $parameters->setMaxDepth(4);
+    $parameters->expandedParents = [];
+    
+    $tree = $menu_tree->load($menu_name, $parameters);
+    $manipulators = [
+      ['callable' => 'menu.default_tree_manipulators:checkAccess'],
+      ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
+    ];
+    
+    $tree = $menu_tree->transform($tree, $manipulators);
+    $build = $menu_tree->build($tree);
+    
+    // Avoid memory issues by not printing full tree
+    \Drupal::logger('fluxio_theme')->debug('Menu levels: @count', [
+      '@count' => count($build['#items'])
+    ]);
+    
+    $variables['content'] = $build;
+  }
+}

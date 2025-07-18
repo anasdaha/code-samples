@@ -1,0 +1,64 @@
+@import "sanitize.css";
+
+:root {
+  cursor: auto;
+}
+
+:focus {
+  outline: 0.25rem dashed var(--outline, currentcolor);
+  outline-offset: 0.25rem;
+
+  &:not(:focus-visible) {
+    outline: 0;
+  }
+}
+
+iframe,
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+iframe,
+video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+blockquote,
+fieldset,
+figure,
+legend {
+  margin-inline: 0;
+  padding: 0;
+  border: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  max-width: 100%;
+  border-radius: 0;
+  color: inherit;
+  font: inherit;
+  text-overflow: ellipsis;
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  cursor: pointer;
+}
+
+[type="search"] {
+  appearance: none;
+}
+
+::placeholder {
+  opacity: 1;
+}

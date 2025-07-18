@@ -1,0 +1,146 @@
+{#
+/**
+ * @file
+ * Theme override for the basic structure of a single Drupal page.
+ *
+ * Variables:
+ * - logged_in: A flag indicating if user is logged in.
+ * - root_path: The root path of the current page (e.g., node, admin, user).
+ * - node_type: The content type for the current node, if the page is a node.
+ * - head_title: List of text elements that make up the head_title variable.
+ *   May contain one or more of the following:
+ *   - title: The title of the page.
+ *   - name: The name of the site.
+ *   - slogan: The slogan of the site.
+ * - page_top: Initial rendered markup. This should be printed before 'page'.
+ * - page: The rendered page markup.
+ * - page_bottom: Closing rendered markup. This variable should be printed after
+ *   'page'.
+ * - db_offline: A flag indicating if the database is offline.
+ * - placeholder_token: The token for generating head, css, js and js-bottom
+ *   placeholders.
+ *
+ * @see template_preprocess_html()
+ */
+#}
+{%
+  set body_classes = [
+    logged_in ? 'user-logged-in',
+    not root_path ? 'path-frontpage' : 'path-' ~ root_path|clean_class,
+    node_type ? 'page-node-type-' ~ node_type|clean_class,
+    db_offline ? 'db-offline',
+    theme.has_glyphicons ? 'has-glyphicons',
+  ]
+%}
+<!DOCTYPE html>
+<html{{ html_attributes }}>
+  <head>
+    <head-placeholder token="{{ placeholder_token }}">
+    <title>{{ head_title|safe_join(' | ') }}</title>
+    <css-placeholder token="{{ placeholder_token }}">
+    <js-placeholder token="{{ placeholder_token }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">      
+    <script>
+      window.markerConfig = {
+        project: '67d9bcabf278430ac800db76', 
+        source: 'snippet',
+      };
+
+      !function(e,r,a){if(!e.__Marker){e.__Marker={};var t=[],n={__cs:t};["show","hide","isVisible","capture","cancelCapture","unload","reload","isExtensionInstalled","setReporter","clearReporter","setCustomData","on","off"].forEach(function(e){n[e]=function(){var r=Array.prototype.slice.call(arguments);r.unshift(e),t.push(r)}}),e.Marker=n;var s=r.createElement("script");s.async=1,s.src="https://edge.marker.io/latest/shim.js";var i=r.getElementsByTagName("script")[0];i.parentNode.insertBefore(s,i)}}(window,document);
+    </script>
+
+    {#
+    <script type="text/javascript" src="https://cdn.weglot.com/weglot.min.js"></script>
+    <script>
+        Weglot.initialize({
+            api_key: 'wg_8f45e3c590d09661d2dd8d2e73e6de604'
+        });
+    </script>
+    #}
+    {#
+    <script>
+    window.babelSharkConfig = {
+      projectId: 7967734,
+      accessCode: "OacGI7jMNy7e1WztRsWWm-7Rcy4xZnx_MBzkVbA_yz0JGJh50G"
+    };
+    </script>
+    <script defer src="https://cdn.babelshark.net/static/babelshark-embed/babelshark.js"></script>
+    #}
+    <!--Library Search Function-->
+    <script type="text/javascript">
+      function searchPrimo() {
+      document.getElementById("primoQuery").value = "any,contains," + document.getElementById("library-landing-search-input").value.replace(/[,]/g, " ");
+      document.forms["searchForm"].submit();
+      }
+    </script>
+    <!--END Library Search Function Script-->
+    
+    <!--Admissions Chat Script-->
+    {% if "/admissions" in url('<current>')|render|render %}
+      <!-- Goodkind widget code -->
+      <script defer type="module" src="https://widget.goodkind.com/gk-chatbot-widget.js"></script>
+      <script type="text/javascript">
+        window.gkCBWConfig = {
+          aiBotId: "668473ff26c41e0013961a81",
+          apiKey: "GD.Oai3BNRWVcT4FLY99HHa3gyYVMUltUlJHY85vy3pf3HmIJEzD5O6T9GHlxbGnMX2",
+        };
+      </script>
+    {% elseif "/financial-aid" in url('<current>')|render|render%}
+      <script defer type="module" src="https://widget.goodkind.com/gk-chatbot-widget.js"></script>
+      <script type="text/javascript">
+        window.gkCBWConfig = {
+          aiBotId: "668473ff26c41e0013961a81",
+          apiKey: "GD.Oai3BNRWVcT4FLY99HHa3gyYVMUltUlJHY85vy3pf3HmIJEzD5O6T9GHlxbGnMX2",
+        };
+      </script>
+    {% elseif "/financial-aid/*" in url('<current>')|render|render%}
+      
+    {% elseif "/academics/academic-advising-center" in url('<current>')|render|render%}
+      <script defer type="module" src="https://widget.goodkind.com/gk-chatbot-widget.js"></script>
+      <script type="text/javascript">
+        window.gkCBWConfig = {
+          aiBotId: "668473ff26c41e0013961a81",
+          apiKey: "GD.Oai3BNRWVcT4FLY99HHa3gyYVMUltUlJHY85vy3pf3HmIJEzD5O6T9GHlxbGnMX2",
+        };
+      </script>
+    {% endif %}
+    <!--END Admissions Chat Script-->
+  </head>
+  <body{{ attributes.addClass(body_classes) }}>
+    {#
+      Keyboard navigation/accessibility link to main content section in
+      page.html.twig.
+    #}
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-MDG7ZG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MDG7ZG');
+    </script>
+
+    <!-- End Google Tag Manager -->
+    <a href="#main-content" class="visually-hidden focusable skip-link">
+      {{ 'Skip to main content'|t }}
+    </a>
+    {{ page_top }}
+    {{ page }}
+    {{ page_bottom }}
+    <js-bottom-placeholder token="{{ placeholder_token }}">
+      
+    <script type="text/javascript">
+      /*<![CDATA[*/
+      (function() {
+        var sz = document.createElement('script'); sz.type = 'text/javascript'; sz.async = true;
+        sz.src = '//siteimproveanalytics.com/js/siteanalyze_52211.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sz, s);
+      })();
+      /*]]>*/
+    </script>
+    
+  </body>
+</html>

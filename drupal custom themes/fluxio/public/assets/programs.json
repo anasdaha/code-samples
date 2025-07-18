@@ -1,0 +1,109 @@
+[
+  {
+    "name": "Accounting",
+    "keywords": [
+      "Accountancy",
+      "Money"
+    ],
+    "type": [
+      "Associate of Applied Science"
+    ],
+    "school": [
+      "School of Business, Information Technology and Social Sciences"
+    ],
+    "interest": [
+      "Business & Entrepreneurship",
+      "Computer Science, Information Technology & Cybersecurity",
+      "Science, Math & Engineering"
+    ],
+    "format": [
+      "On-site"
+    ],
+    "details": [
+      {
+        "section": "Undergraduate",
+        "items": [
+          {
+            "name": "Accounting, B.S.",
+            "location": "Location",
+            "modality": "Modality",
+            "description": "Description — Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.",
+            "link": "#"
+          },
+          {
+            "name": "Accounting, Minor",
+            "location": "Location",
+            "modality": "Modality",
+            "description": "Description — Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.",
+            "link": "#"
+          }
+        ]
+      },
+      {
+        "section": "Graduate",
+        "items": [
+          {
+            "name": "Accounting, M.S.",
+            "location": "Location",
+            "modality": "Modality",
+            "description": "Description — Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.",
+            "link": "#"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Paramedic",
+    "keywords": [
+      "Ambulance",
+      "Health"
+    ],
+    "type": [
+      "Associate of Applied Science"
+    ],
+    "school": [
+      "School of Health Sciences"
+    ],
+    "interest": [
+      "Health Science",
+      "Education, Social Science & Public Safety"
+    ],
+    "format": [
+      "On-site"
+    ],
+    "details": [
+      {
+        "section": "Undergraduate",
+        "items": [
+          {
+            "name": "Paramedic, B.S.",
+            "location": "Location",
+            "modality": "Modality",
+            "description": "Description — Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.",
+            "link": "#"
+          },
+          {
+            "name": "Paramedic, Minor",
+            "location": "Location",
+            "modality": "Modality",
+            "description": "Description — Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.",
+            "link": "#"
+          }
+        ]
+      },
+      {
+        "section": "Graduate",
+        "items": [
+          {
+            "name": "Paramedic, M.S.",
+            "location": "Location",
+            "modality": "Modality",
+            "description": "Description — Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.",
+            "link": "#"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,31 @@
+name: Fluxio
+type: theme
+version: VERSION
+core_version_requirement: ^9 || ^10
+base theme: false
+
+libraries:
+  - fluxio/global-styling
+
+regions:
+  admin_tabs: 'Before Header'
+  alert: 'Site Logo'
+  header: 'Header'
+  primary_menu: 'Primary Menu'
+  secondary_menu: 'Secondary Menu'
+  tertiary_menu: 'Tertiary And Landing Menu'
+  highlighted: 'Highlighted'
+  breadcrumb: 'Breadcrumb'
+  content: 'Content'
+  content_bottom: 'Content Bottom'
+  sidebar_first: 'Sidebar First'
+  sidebar_second: 'Sidebar Second'
+  footer: 'Footer Menu'
+  footer_blocks: 'Footer Content'
+  footer_bottom: 'Footer Bottom'
+  footer_social: 'Footer Social'
+  sidebar_menu: 'Program Intro'
+  news_sidebar: 'News Sidebar'
+
+dependencies:
+  - drupal:menu_link_content

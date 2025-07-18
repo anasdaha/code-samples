@@ -1,0 +1,23 @@
+{
+  "name": "build-astro",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "automodal": "^0.2.0",
+    "countup.js": "^2.8.0",
+    "data-utilities": "^0.1.0",
+    "oversnap": "^0.7.2",
+    "sanitize.css": "^13.0.0"
+  },
+  "devDependencies": {
+    "astro": "^3.0.1",
+    "postcss-preset-env": "^9.1.2"
+  }
+}

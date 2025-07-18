@@ -1,0 +1,112 @@
+@import "oversnap/index.css";
+
+[data-oversnap] {
+  --active: 1;
+  --gap: 2rem;
+  --size: calc((100% / var(--active)) - ((var(--gap) * (var(--active) - 1)) / var(--active)));
+
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  @media (width >= 48em) {
+    padding-inline: 4.5rem;
+  }
+}
+
+[data-oversnap-scroll] {
+  gap: var(--gap);
+}
+
+[data-oversnap-item] {
+  width: var(--size);
+  scroll-snap-align: center;
+}
+
+[data-oversnap-nav] {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  order: 1;
+  margin-top: var(--space-sm);
+  background-color: transparent;
+  pointer-events: none;
+
+  @media (width >= 48em) {
+    justify-content: space-between;
+    position: absolute;
+    top: calc((100% - 0.75rem - var(--space-sm)) / 2);
+    right: 0;
+    left: 0;
+    margin: 0;
+    transform: translateY(-50%);
+  }
+}
+
+[data-oversnap-prev],
+[data-oversnap-next] {
+  --outline: var(--button);
+
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--button);
+  pointer-events: auto;
+
+  &::before {
+    content: "";
+    width: 2rem;
+    height: 2rem;
+    background: var(--button-text);
+  }
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &[disabled] {
+    opacity: 0.25;
+    pointer-events: none;
+  }
+}
+
+[data-oversnap-prev] {
+  &::before {
+    mask-image: url("../assets/chevron-left.svg");
+  }
+}
+
+[data-oversnap-next] {
+  &::before {
+    mask-image: url("../assets/chevron-right.svg");
+  }
+}
+
+[data-oversnap-pagination] {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: var(--space-sm);
+  pointer-events: none;
+}
+
+[data-oversnap-page] {
+  --outline: var(--button);
+
+  width: 0.75rem;
+  height: 0.75rem;
+  padding: 0;
+  border: 0.125rem solid var(--button);
+  border-radius: 50%;
+  background: transparent;
+  pointer-events: auto;
+}
+
+[data-oversnap-page="active"] {
+  background: var(--button);
+}

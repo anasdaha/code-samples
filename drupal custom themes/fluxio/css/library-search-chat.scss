@@ -1,0 +1,116 @@
+//Library Search Styles
+
+#library-search-container {
+	width: 100%;
+	margin: 0px;
+	background-color: #2a90d0;
+	padding: 35px 0px 10px;
+	position: relative;
+	height: 150px;
+	
+	#library-search-content-wrapper {
+		width: 70%;
+		height: 100%;
+		margin: 0 auto;
+		padding: 0px;
+		position: relative;
+		
+		.library-search-box {
+			width: 100%;
+			height: 50%;
+			position: absolute;
+			border-radius: 10px;
+			top: 0px;
+			left: 0px;
+			padding: 5px 10px;
+			border: 1px solid #ccc;
+		}
+		
+		#library-landing-search-submit-button{
+			position: absolute;
+			top: 5%;
+			right: 1%;
+			z-index: 1;
+			content: "";
+			width: 2rem;
+			height: 2rem;
+			display: block;
+			background: var(--blue);
+			-webkit-mask-image: url(../dist/assets/search.svg);
+			mask-image: url(../dist/assets/search.svg);
+		}
+		
+		#library-landing-widget-additional-links{
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: 47%;
+			padding-top: 1%;
+			text-align: center;
+			
+			a{
+				display: inline-block;
+				width: auto;
+				text-align: center;
+				font-family: "Roboto Slab",Helvetica,Arial,"Lucida Grande",sans-serif;
+				color: #ffffff;
+				cursor: pointer;
+				vertical-align: middle;
+				//text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+			}
+			
+			.library-landing-widget-additional-links-vertical-line{
+				display: inline-block;
+				width: 1px;
+				height: 80%;
+				margin: 0 5px 0 5px;
+				vertical-align: middle;
+				border-right: 2px solid #ffffff;
+				//box-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+			}
+		}
+	}	
+}
+
+//Library Chat Box
+
+#library-chatbox {
+	position: fixed;
+	bottom: 0px;
+	right: 20px;
+	z-index: 999;
+	cursor: pointer;
+	//display: block;
+	overflow: auto;
+	display: inline-block;
+	background-color: #2a90d0;
+	color: white;
+	padding: 0.8em 1.6em;
+	border-radius: 0.625em;
+	border-width: 0 0 0.2em;
+	border-style: none none solid;
+	border-color: #2171c5;
+	font-size: 0.975em;
+	font-weight: normal;
+	font-family: "Roboto Slab", Helvetica, Arial, "Lucida Grande", sans-serif;
+	transition: all 0.3s ease-in;
+	-webkit-transition: all 0.3s ease-in;
+	-moz-transition: all 0.3s ease-in;
+	-o-transition: all 0.3s ease-in;
+
+	&:hover {
+		background-color: #2171c5;
+		border-color: #0c4b8e;
+	}
+
+	a {
+		color: #fff;
+		text-decoration: none;
+
+		&:hover{
+			text-decoration: none;
+		}
+	}
+}
+

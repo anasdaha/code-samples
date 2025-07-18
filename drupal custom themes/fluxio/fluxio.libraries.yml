@@ -1,0 +1,19 @@
+global-styling:
+  version: VERSION
+  css:
+    theme:
+      dist/assets/style.css: {}
+      css/custom.css: {}
+      css/mega-menu.css: {}
+      css/webform.css: {}
+      css/library-search-chat.css: {}
+      
+  js:
+    dist/assets/script.js: {}
+    js/custom.js: {}
+    js/mega-menu.js: {}
+    js/fluxio-main-library-chat.js: {}
+
+  dependencies:
+    - core/jquery
+    - core/drupal      

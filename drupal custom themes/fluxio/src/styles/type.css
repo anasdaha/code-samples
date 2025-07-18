@@ -1,0 +1,70 @@
+:root {
+  scroll-padding-top: 4rem;
+
+  @media (width >= 64em) {
+    scroll-padding-top: 5.5rem;
+  }
+}
+
+body {
+  font: var(--body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-block: min(2em, 4rem) 0.5em;
+  color: var(--heading);
+}
+
+h1,
+.h1 {
+  font: var(--h1);
+  text-transform: uppercase;
+}
+
+h2,
+.h2 {
+  font: var(--h2);
+  text-transform: none;
+}
+
+h3,
+.h3 {
+  font: var(--h3);
+}
+
+h4,
+.h4 {
+  font: var(--h4);
+}
+
+h5,
+.h5 {
+  font: var(--h5);
+}
+
+h6,
+.h6 {
+  font: var(--h6);
+}
+
+a {
+  color: var(--link);
+  text-decoration: underline 0.0625em;
+  text-underline-offset: 0.125em;
+
+  &:hover {
+    text-decoration-thickness: 0.125em;
+  }
+}
+
+hr {
+  display: block;
+  margin: var(--space-sm) 0;
+  border: 0;
+  border-top: 0.0625rem solid var(--link);
+}
