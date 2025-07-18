@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\neiu_pf\Controller;
+namespace Drupal\academics_course_finder\Controller;
 
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 use Drupal\Core\Cache\RefinableCacheableDependencyTrait;
@@ -8,7 +8,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Component\Utility\Html;
 
 /**
- * Returns responses for NEIU Program routes.
+ * Returns responses for Academics Course Finder Program routes.
  */
 class ProgramFinderController extends ControllerBase implements RefinableCacheableDependencyInterface {
 
