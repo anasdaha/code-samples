@@ -16,7 +16,8 @@ This repository contains a collection of **custom Drupal modules** and **drupal 
 │   └── program_finder/
 └── drupal-custom-themes/
     ├── bloomix_base/
-    └── novaspire/
+    ├── novaspire/
+    └── fluxio/
     
 
 ---
@@ -210,6 +211,48 @@ novaspire/
 - Reduce redundant boilerplate and unify branding across sites.
 
 ---
+
+## 3. Custom Theme: `fluxio`
+
+**Theme Type:**  
+Custom base theme for Drupal 10+, optionally using custom grid.
+
+**Purpose:**  
+A lightweight, responsive starter theme to integrated developed frontend layout quickly and cleanly.
+
+**Key Features:**
+- Mobile-first design, grid-ready layout.
+- Organized folder structure for CSS, JS, and Twig templates.
+- Basic styling for Drupal core elements (nodes, views, menus, forms).
+- Extendable with Sass, PostCSS, or utility frameworks.
+
+**Directory Structure:**
+
+fluxio/
+├── css/
+│ └── custom.css
+├── js/
+│ └── custom.js
+├── dist/assets/
+│ └── *.svg
+├── src/
+│ └── */*.*
+├── templates/
+│ └── */*.html.twig
+├── public/assets/
+│ └── *.svg
+├── screenshot.png
+├── favicon.ico
+├── novaspire.info.yml
+├── novaspire.theme
+└── novaspire.libraries.yml
+
+**Use Cases:**
+- Serve as a base theme for multiple projects.
+- Reduce redundant boilerplate and unify branding across sites.
+
+---
+
 ## 🚀 Installation
 
 To use these modules and theme in your Drupal project:
