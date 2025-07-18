@@ -1,0 +1,5 @@
+name: Admin Dashboard Tweaks
+type: module
+description: 'Provides Admin Dashboard Tweaks for cron to import Media and faculty nodes and style for Admin Theme'
+package: Custom
+core_version_requirement: ^9 || ^10

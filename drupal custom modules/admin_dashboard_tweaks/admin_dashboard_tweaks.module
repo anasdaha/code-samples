@@ -1,0 +1,63 @@
+<?php
+use Drupal\migrate\MigrateExecutable;
+use Drupal\migrate\Plugin\MigrationPluginManagerInterface;
+use Drupal\migrate\MigrateMessage;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @file
+ * Primary module hooks for Admin Dashboard Tweaks Style module.
+ */
+
+/**
+ * Implements hook_preprocess_HOOK() for page_attachments.
+ */
+function admin_dashboard_tweaks_page_attachments_alter(&$page) {
+  $page['#attached']['library'][] = 'admin_dashboard_tweaks/admin_dashboard_tweaks';
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function admin_dashboard_tweaks_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+
+  if ($form_id == 'node_program_edit_form' && isset($form['field_areas_study'])) {
+    // Iterate through the options and replace `&#44;` with `,`.
+    foreach ($form['field_areas_study']['widget']['#options'] as $key => &$option) {
+      $option = str_replace('&#44;', ',', $option);
+    }
+  }
+}
+
+
+/**
+ * Implements hook_cron().
+ */
+function admin_dashboard_tweaks_cron() {
+  // Logger.
+  $logger = \Drupal::logger('admin_dashboard_tweaks');
+
+  // Migration IDs.
+  $migration_ids = ['images', 'faculty'];
+
+  foreach ($migration_ids as $migration_id) {
+    /** @var \Drupal\migrate\Plugin\MigrationInterface $migration */
+    $migration = \Drupal::service('plugin.manager.migration')->createInstance($migration_id);
+
+    if ($migration) {
+      $logger->info('Starting migration import: @migration_id', ['@migration_id' => $migration_id]);
+
+      $executable = new MigrateExecutable($migration, new MigrateMessage());
+      $result = $executable->import();
+
+      $logger->info('Completed migration import: @migration_id with status: @status', [
+        '@migration_id' => $migration_id,
+        '@status' => $result,
+      ]);
+    }
+    else {
+      $logger->error('Migration not found: @migration_id', ['@migration_id' => $migration_id]);
+    }
+  }
+}

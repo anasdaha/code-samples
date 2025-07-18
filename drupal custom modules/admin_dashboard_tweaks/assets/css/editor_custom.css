@@ -1,0 +1,98 @@
+h1, .h1 {
+    font: 700 clamp(3.5rem, .833vw + 3.333rem, 4rem)/clamp(3.5rem, .833vw + 3.333rem, 4rem) "awesome", serif;
+    letter-spacing: 2.56px;
+    color: #1E4B99;
+}
+h2, .h2 {
+    font: 700 clamp(2.125rem, .625vw + 2rem, 2.5rem)/clamp(2.55rem, 2vw + 2.15rem, 3.75rem) "awesome", serif;
+    letter-spacing: 1.6px;
+    color: #1E4B99;
+}
+h3, .h3 {
+    font: 700 clamp(1.75rem, 1.1vw + 1.9rem, 2rem) "awesome", serif;
+    letter-spacing: 1.28px;
+    color: #1E4B99;
+}
+h4, .h4 {
+    font: 600 1.25rem/1.15 "obvia", sans-serif;
+    letter-spacing: normal;
+    color: #1E4B99;
+    text-decoration-thickness: 0.15rem;
+}
+h5, .h5 {
+    font: 600 .938rem/1.25 "obvia", sans-serif;
+    color:#1E4B99;
+}
+h6, .h6 {
+    font: 700 .875rem/1.5 "europa", sans-serif;
+    color:#072457;
+}
+.t-intro {
+    font-family: "obvia", sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 150%;
+    color: #1e4b99;
+}
+.date-recur-modular-sierra-widget select.date-recur-modular-sierra-widget-recurrence-option{
+    display: none;
+}
+.ck .button, .ck .Button{
+    color: #0b0b0c;
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    font-size: .94rem;
+    letter-spacing: .6px;
+    font-weight: 700;
+    font-family: "obvia", sans-serif;
+    background: transparent;
+    border: 2px solid #1d9cd3;
+    width: auto;
+    padding: .75rem 2.5rem;
+    overflow: hidden;
+    transition: .4s ease;
+    z-index: 1;
+}
+.ck .button:after, .ck .Button:after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    background-color: #1d9cd3;
+    transform-origin: left bottom;
+    transition-property: width, height;
+    transition-duration: .3s;
+    z-index: -1;
+}
+.ck .button:hover:after, .ck .Button:hover:after{
+    background-color: #1d9cd3;
+}
+.ck .button:is(:hover):after, .ck .Button:is(:hover):after {
+    width: 100%;
+    height: 100%;
+}
+.draggable a.tabledrag-handle{
+    display: inline-block !important;
+}
+figure.image{
+    height: auto !important;
+}
+@media (min-width: 64em){
+    .t-intro {
+        font-size: 28px;
+        line-height: 42px;
+    }
+    .cta-heading {
+        margin: 0 0 1.5rem;
+        font-size: 50px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 64px;
+        letter-spacing: 2px;
+    }
+}
